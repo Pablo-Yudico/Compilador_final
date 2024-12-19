@@ -97,15 +97,15 @@ class Lexer {
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\1\2\1\3\1\4\1\1\1\5\1\1"+
     "\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15"+
-    "\1\16\1\17\1\20\1\21\1\22\13\23\1\24\1\25"+
+    "\1\16\1\17\1\20\1\21\1\22\14\23\1\24\1\25"+
     "\1\26\1\27\1\0\1\30\4\0\1\31\1\32\1\33"+
-    "\1\34\6\23\1\35\10\23\1\36\10\23\1\37\10\23"+
-    "\1\40\1\41\5\23\1\42\4\23\1\43\1\23\1\44"+
-    "\1\45\2\23\1\46\1\47\1\50\3\23\1\51\1\52"+
-    "\1\53\1\54";
+    "\1\34\6\23\1\35\11\23\1\36\10\23\1\37\11\23"+
+    "\1\40\1\41\4\23\1\42\1\23\1\43\4\23\1\44"+
+    "\1\23\1\45\1\46\2\23\1\47\1\50\1\51\3\23"+
+    "\1\52\1\53\1\54\1\55";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[107];
+    int [] result = new int[111];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -134,19 +134,19 @@ class Lexer {
     "\0\61\0\61\0\61\0\365\0\61\0\365\0\61\0\u0126"+
     "\0\61\0\61\0\u0157\0\u0188\0\u01b9\0\u01ea\0\u021b\0\u024c"+
     "\0\u027d\0\u02ae\0\u02df\0\u0310\0\u0341\0\u0372\0\u03a3\0\u03d4"+
-    "\0\61\0\61\0\61\0\61\0\223\0\61\0\u0405\0\u0436"+
-    "\0\u0467\0\u0498\0\u04c9\0\61\0\61\0\61\0\u04fa\0\u052b"+
-    "\0\u055c\0\u058d\0\u05be\0\u05ef\0\u01ea\0\u0620\0\u0651\0\u0682"+
-    "\0\u06b3\0\u06e4\0\u0715\0\u0746\0\u0777\0\61\0\u07a8\0\u07d9"+
-    "\0\u080a\0\u083b\0\u086c\0\u089d\0\u08ce\0\u08ff\0\u01ea\0\u0930"+
-    "\0\u0961\0\u0992\0\u09c3\0\u09f4\0\u0a25\0\u0a56\0\u0a87\0\u01ea"+
-    "\0\u01ea\0\u0ab8\0\u0ae9\0\u0b1a\0\u0b4b\0\u0b7c\0\u01ea\0\u0bad"+
-    "\0\u0bde\0\u0c0f\0\u0c40\0\u01ea\0\u0c71\0\u01ea\0\u01ea\0\u0ca2"+
-    "\0\u0cd3\0\u01ea\0\u01ea\0\u01ea\0\u0d04\0\u0d35\0\u0d66\0\u01ea"+
-    "\0\u01ea\0\u01ea\0\u01ea";
+    "\0\u0405\0\61\0\61\0\61\0\61\0\223\0\61\0\u0436"+
+    "\0\u0467\0\u0498\0\u04c9\0\u04fa\0\61\0\61\0\61\0\u052b"+
+    "\0\u055c\0\u058d\0\u05be\0\u05ef\0\u0620\0\u01ea\0\u0651\0\u0682"+
+    "\0\u06b3\0\u06e4\0\u0715\0\u0746\0\u0777\0\u07a8\0\u07d9\0\61"+
+    "\0\u080a\0\u083b\0\u086c\0\u089d\0\u08ce\0\u08ff\0\u0930\0\u0961"+
+    "\0\u01ea\0\u0992\0\u09c3\0\u09f4\0\u0a25\0\u0a56\0\u0a87\0\u0ab8"+
+    "\0\u0ae9\0\u0b1a\0\u01ea\0\u01ea\0\u0b4b\0\u0b7c\0\u0bad\0\u0bde"+
+    "\0\u01ea\0\u0c0f\0\u01ea\0\u0c40\0\u0c71\0\u0ca2\0\u0cd3\0\u01ea"+
+    "\0\u0d04\0\u01ea\0\u01ea\0\u0d35\0\u0d66\0\u01ea\0\u01ea\0\u01ea"+
+    "\0\u0d97\0\u0dc8\0\u0df9\0\u01ea\0\u01ea\0\u01ea\0\u01ea";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[107];
+    int [] result = new int[111];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -173,72 +173,75 @@ class Lexer {
     "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\2"+
     "\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26"+
     "\1\27\1\2\1\26\1\30\1\31\1\32\1\26\1\33"+
-    "\2\26\1\34\5\26\1\35\1\26\1\36\1\37\1\26"+
-    "\1\40\1\41\1\42\1\43\106\0\1\44\33\0\6\45"+
-    "\1\46\22\45\1\47\27\45\10\50\1\0\20\50\1\51"+
-    "\27\50\21\0\1\52\56\0\1\53\1\0\1\20\64\0"+
-    "\1\54\60\0\1\55\60\0\1\56\54\0\1\26\5\0"+
+    "\2\26\1\34\5\26\1\35\1\36\1\37\1\40\1\26"+
+    "\1\41\1\42\1\43\1\44\106\0\1\45\33\0\6\46"+
+    "\1\47\22\46\1\50\27\46\10\51\1\0\20\51\1\52"+
+    "\27\51\21\0\1\53\56\0\1\54\1\0\1\20\64\0"+
+    "\1\55\60\0\1\56\60\0\1\57\54\0\1\26\5\0"+
     "\2\26\1\0\24\26\24\0\1\26\5\0\2\26\1\0"+
-    "\21\26\1\57\2\26\24\0\1\26\5\0\2\26\1\0"+
-    "\15\26\1\60\1\26\1\61\4\26\24\0\1\26\5\0"+
-    "\2\26\1\0\1\62\6\26\1\63\14\26\24\0\1\26"+
-    "\5\0\2\26\1\0\4\26\1\64\10\26\1\65\6\26"+
-    "\24\0\1\26\5\0\2\26\1\0\1\66\11\26\1\67"+
-    "\11\26\24\0\1\26\5\0\2\26\1\0\14\26\1\70"+
-    "\7\26\24\0\1\26\5\0\2\26\1\0\17\26\1\71"+
-    "\4\26\24\0\1\26\5\0\2\26\1\0\23\26\1\72"+
-    "\24\0\1\26\5\0\2\26\1\0\17\26\1\73\4\26"+
-    "\24\0\1\26\5\0\2\26\1\0\7\26\1\74\7\26"+
-    "\1\75\4\26\3\0\2\45\3\0\54\45\10\0\1\76"+
-    "\50\0\2\50\3\0\54\50\17\0\1\53\1\0\1\52"+
-    "\60\0\1\53\60\0\1\26\5\0\2\26\1\0\17\26"+
-    "\1\77\4\26\24\0\1\26\5\0\2\26\1\0\15\26"+
-    "\1\100\6\26\24\0\1\26\5\0\2\26\1\0\4\26"+
-    "\1\101\17\26\24\0\1\26\5\0\2\26\1\0\20\26"+
-    "\1\102\3\26\24\0\1\26\5\0\2\26\1\0\1\103"+
-    "\23\26\24\0\1\26\5\0\2\26\1\0\5\26\1\104"+
-    "\16\26\24\0\1\26\5\0\2\26\1\0\12\26\1\105"+
-    "\11\26\24\0\1\26\5\0\2\26\1\0\15\26\1\106"+
-    "\6\26\24\0\1\26\5\0\2\26\1\0\21\26\1\107"+
-    "\2\26\24\0\1\26\5\0\2\26\1\0\15\26\1\110"+
-    "\6\26\24\0\1\26\5\0\2\26\1\0\10\26\1\111"+
-    "\13\26\24\0\1\26\5\0\2\26\1\0\22\26\1\112"+
-    "\1\26\24\0\1\26\5\0\2\26\1\0\10\26\1\113"+
-    "\13\26\24\0\1\26\5\0\2\26\1\0\10\26\1\114"+
-    "\13\26\24\0\1\26\5\0\2\26\1\0\10\26\1\115"+
-    "\13\26\24\0\1\26\5\0\2\26\1\0\12\26\1\116"+
-    "\11\26\24\0\1\26\5\0\2\26\1\0\1\117\23\26"+
-    "\24\0\1\26\5\0\2\26\1\0\4\26\1\120\17\26"+
-    "\24\0\1\26\5\0\2\26\1\0\17\26\1\121\4\26"+
+    "\21\26\1\60\2\26\24\0\1\26\5\0\2\26\1\0"+
+    "\15\26\1\61\1\26\1\62\4\26\24\0\1\26\5\0"+
+    "\2\26\1\0\1\63\6\26\1\64\14\26\24\0\1\26"+
+    "\5\0\2\26\1\0\4\26\1\65\10\26\1\66\6\26"+
+    "\24\0\1\26\5\0\2\26\1\0\1\67\11\26\1\70"+
+    "\11\26\24\0\1\26\5\0\2\26\1\0\14\26\1\71"+
+    "\7\26\24\0\1\26\5\0\2\26\1\0\17\26\1\72"+
+    "\4\26\24\0\1\26\5\0\2\26\1\0\4\26\1\73"+
+    "\17\26\24\0\1\26\5\0\2\26\1\0\23\26\1\74"+
+    "\24\0\1\26\5\0\2\26\1\0\17\26\1\75\4\26"+
+    "\24\0\1\26\5\0\2\26\1\0\7\26\1\76\7\26"+
+    "\1\77\4\26\3\0\2\46\3\0\54\46\10\0\1\100"+
+    "\50\0\2\51\3\0\54\51\17\0\1\54\1\0\1\53"+
+    "\60\0\1\54\60\0\1\26\5\0\2\26\1\0\17\26"+
+    "\1\101\4\26\24\0\1\26\5\0\2\26\1\0\15\26"+
+    "\1\102\6\26\24\0\1\26\5\0\2\26\1\0\4\26"+
+    "\1\103\17\26\24\0\1\26\5\0\2\26\1\0\20\26"+
+    "\1\104\3\26\24\0\1\26\5\0\2\26\1\0\1\105"+
+    "\23\26\24\0\1\26\5\0\2\26\1\0\5\26\1\106"+
+    "\16\26\24\0\1\26\5\0\2\26\1\0\12\26\1\107"+
+    "\11\26\24\0\1\26\5\0\2\26\1\0\15\26\1\110"+
+    "\6\26\24\0\1\26\5\0\2\26\1\0\21\26\1\111"+
+    "\2\26\24\0\1\26\5\0\2\26\1\0\15\26\1\112"+
+    "\6\26\24\0\1\26\5\0\2\26\1\0\1\113\23\26"+
+    "\24\0\1\26\5\0\2\26\1\0\10\26\1\114\13\26"+
+    "\24\0\1\26\5\0\2\26\1\0\22\26\1\115\1\26"+
+    "\24\0\1\26\5\0\2\26\1\0\10\26\1\116\13\26"+
+    "\24\0\1\26\5\0\2\26\1\0\10\26\1\117\13\26"+
+    "\24\0\1\26\5\0\2\26\1\0\10\26\1\120\13\26"+
+    "\24\0\1\26\5\0\2\26\1\0\12\26\1\121\11\26"+
     "\24\0\1\26\5\0\2\26\1\0\1\122\23\26\24\0"+
-    "\1\26\5\0\2\26\1\0\20\26\1\123\3\26\24\0"+
-    "\1\26\5\0\2\26\1\0\1\124\23\26\24\0\1\26"+
-    "\5\0\2\26\1\0\6\26\1\125\15\26\24\0\1\26"+
-    "\5\0\2\26\1\0\21\26\1\126\2\26\24\0\1\26"+
-    "\5\0\2\26\1\0\4\26\1\127\17\26\24\0\1\26"+
-    "\5\0\2\26\1\0\12\26\1\130\11\26\24\0\1\26"+
-    "\5\0\2\26\1\0\21\26\1\131\2\26\24\0\1\26"+
-    "\5\0\2\26\1\0\14\26\1\132\7\26\24\0\1\26"+
-    "\5\0\2\26\1\0\4\26\1\133\17\26\24\0\1\26"+
-    "\5\0\2\26\1\0\11\26\1\134\12\26\24\0\1\26"+
-    "\5\0\2\26\1\0\22\26\1\135\1\26\24\0\1\26"+
-    "\5\0\2\26\1\0\4\26\1\136\17\26\24\0\1\26"+
-    "\5\0\2\26\1\0\21\26\1\137\2\26\24\0\1\26"+
-    "\5\0\2\26\1\0\17\26\1\140\4\26\24\0\1\26"+
-    "\5\0\2\26\1\0\2\26\1\141\21\26\24\0\1\26"+
-    "\5\0\2\26\1\0\4\26\1\142\17\26\24\0\1\26"+
-    "\5\0\2\26\1\0\4\26\1\143\17\26\24\0\1\26"+
-    "\5\0\2\26\1\0\6\26\1\144\15\26\24\0\1\26"+
-    "\5\0\2\26\1\0\1\145\23\26\24\0\1\26\5\0"+
-    "\2\26\1\0\12\26\1\146\11\26\24\0\1\26\5\0"+
-    "\2\26\1\0\1\147\23\26\24\0\1\26\5\0\2\26"+
-    "\1\0\7\26\1\150\14\26\24\0\1\26\5\0\2\26"+
-    "\1\0\14\26\1\151\7\26\24\0\1\26\5\0\2\26"+
-    "\1\0\21\26\1\152\2\26\24\0\1\26\5\0\2\26"+
-    "\1\0\13\26\1\153\10\26\3\0";
+    "\1\26\5\0\2\26\1\0\4\26\1\123\17\26\24\0"+
+    "\1\26\5\0\2\26\1\0\17\26\1\124\4\26\24\0"+
+    "\1\26\5\0\2\26\1\0\1\125\23\26\24\0\1\26"+
+    "\5\0\2\26\1\0\20\26\1\126\3\26\24\0\1\26"+
+    "\5\0\2\26\1\0\1\127\23\26\24\0\1\26\5\0"+
+    "\2\26\1\0\6\26\1\130\15\26\24\0\1\26\5\0"+
+    "\2\26\1\0\3\26\1\131\20\26\24\0\1\26\5\0"+
+    "\2\26\1\0\21\26\1\132\2\26\24\0\1\26\5\0"+
+    "\2\26\1\0\4\26\1\133\17\26\24\0\1\26\5\0"+
+    "\2\26\1\0\12\26\1\134\11\26\24\0\1\26\5\0"+
+    "\2\26\1\0\21\26\1\135\2\26\24\0\1\26\5\0"+
+    "\2\26\1\0\14\26\1\136\7\26\24\0\1\26\5\0"+
+    "\2\26\1\0\4\26\1\137\17\26\24\0\1\26\5\0"+
+    "\2\26\1\0\11\26\1\140\12\26\24\0\1\26\5\0"+
+    "\2\26\1\0\22\26\1\141\1\26\24\0\1\26\5\0"+
+    "\2\26\1\0\4\26\1\142\17\26\24\0\1\26\5\0"+
+    "\2\26\1\0\21\26\1\143\2\26\24\0\1\26\5\0"+
+    "\2\26\1\0\17\26\1\144\4\26\24\0\1\26\5\0"+
+    "\2\26\1\0\2\26\1\145\21\26\24\0\1\26\5\0"+
+    "\2\26\1\0\4\26\1\146\17\26\24\0\1\26\5\0"+
+    "\2\26\1\0\4\26\1\147\17\26\24\0\1\26\5\0"+
+    "\2\26\1\0\6\26\1\150\15\26\24\0\1\26\5\0"+
+    "\2\26\1\0\1\151\23\26\24\0\1\26\5\0\2\26"+
+    "\1\0\12\26\1\152\11\26\24\0\1\26\5\0\2\26"+
+    "\1\0\1\153\23\26\24\0\1\26\5\0\2\26\1\0"+
+    "\7\26\1\154\14\26\24\0\1\26\5\0\2\26\1\0"+
+    "\14\26\1\155\7\26\24\0\1\26\5\0\2\26\1\0"+
+    "\21\26\1\156\2\26\24\0\1\26\5\0\2\26\1\0"+
+    "\13\26\1\157\10\26\3\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[3479];
+    int [] result = new int[3626];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -282,11 +285,11 @@ class Lexer {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\3\11\2\1\1\11\1\1\3\11\1\1\1\11"+
-    "\1\1\1\11\1\1\2\11\16\1\4\11\1\0\1\11"+
-    "\4\0\1\1\3\11\17\1\1\11\55\1";
+    "\1\1\1\11\1\1\2\11\17\1\4\11\1\0\1\11"+
+    "\4\0\1\1\3\11\20\1\1\11\57\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[107];
+    int [] result = new int[111];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -726,222 +729,227 @@ class Lexer {
             { System.err.println("Error: Token desconocido '" + yytext() + "' en la línea " + linea);
             }
           // fall through
-          case 45: break;
+          case 46: break;
           case 2:
             { /* ignora espacios en blanco */
             }
           // fall through
-          case 46: break;
+          case 47: break;
           case 3:
             { linea++;
             }
           // fall through
-          case 47: break;
+          case 48: break;
           case 4:
             { return new Token(Tokens.not.ordinal(), yytext(), linea);
             }
           // fall through
-          case 48: break;
+          case 49: break;
           case 5:
             { return new Token(Tokens.and.ordinal(), yytext(), linea);
             }
           // fall through
-          case 49: break;
+          case 50: break;
           case 6:
             { return new Token(Tokens.p_a.ordinal(), yytext(), linea);
             }
           // fall through
-          case 50: break;
+          case 51: break;
           case 7:
             { return new Token(Tokens.p_c.ordinal(), yytext(), linea);
             }
           // fall through
-          case 51: break;
+          case 52: break;
           case 8:
             { return new Token(Tokens.mul.ordinal(), yytext(), linea);
             }
           // fall through
-          case 52: break;
+          case 53: break;
           case 9:
             { return new Token(Tokens.sum.ordinal(), yytext(), linea);
             }
           // fall through
-          case 53: break;
+          case 54: break;
           case 10:
             { return new Token(Tokens.coma.ordinal(), yytext(), linea);
             }
           // fall through
-          case 54: break;
+          case 55: break;
           case 11:
             { return new Token(Tokens.res.ordinal(), yytext(), linea);
             }
           // fall through
-          case 55: break;
+          case 56: break;
           case 12:
             { return new Token(Tokens.div.ordinal(), yytext(), linea);
             }
           // fall through
-          case 56: break;
+          case 57: break;
           case 13:
             { return new Token(Tokens.nume.ordinal(), yytext(), linea);
             }
           // fall through
-          case 57: break;
+          case 58: break;
           case 14:
             { return new Token(Tokens.puntos.ordinal(), yytext(), linea);
             }
           // fall through
-          case 58: break;
+          case 59: break;
           case 15:
             { return new Token(Tokens.pcoma.ordinal(), yytext(), linea);
             }
           // fall through
-          case 59: break;
+          case 60: break;
           case 16:
             { return new Token(Tokens.me.ordinal(), yytext(), linea);
             }
           // fall through
-          case 60: break;
+          case 61: break;
           case 17:
             { return new Token(Tokens.igual.ordinal(), yytext(), linea);
             }
           // fall through
-          case 61: break;
+          case 62: break;
           case 18:
             { return new Token(Tokens.ma.ordinal(), yytext(), linea);
             }
           // fall through
-          case 62: break;
+          case 63: break;
           case 19:
             { return new Token(Tokens.id.ordinal(), yytext(), linea);
             }
           // fall through
-          case 63: break;
+          case 64: break;
           case 20:
             { return new Token(Tokens.l_a.ordinal(), yytext(), linea);
             }
           // fall through
-          case 64: break;
+          case 65: break;
           case 21:
             { return new Token(Tokens.or.ordinal(), yytext(), linea);
             }
           // fall through
-          case 65: break;
+          case 66: break;
           case 22:
             { return new Token(Tokens.l_c.ordinal(), yytext(), linea);
             }
           // fall through
-          case 66: break;
+          case 67: break;
           case 23:
             { return new Token(Tokens.dif.ordinal(), yytext(), linea);
             }
           // fall through
-          case 67: break;
+          case 68: break;
           case 24:
             { return new Token(Tokens.lits.ordinal(), yytext(), linea);
             }
           // fall through
-          case 68: break;
+          case 69: break;
           case 25:
             { return new Token(Tokens.numf.ordinal(), yytext(), linea);
             }
           // fall through
-          case 69: break;
+          case 70: break;
           case 26:
             { return new Token(Tokens.mai.ordinal(), yytext(), linea);
             }
           // fall through
-          case 70: break;
+          case 71: break;
           case 27:
             { return new Token(Tokens.exa.ordinal(), yytext(), linea);
             }
           // fall through
-          case 71: break;
+          case 72: break;
           case 28:
             { return new Token(Tokens.mei.ordinal(), yytext(), linea);
             }
           // fall through
-          case 72: break;
+          case 73: break;
           case 29:
             { return new Token(Tokens.edo.ordinal(), yytext(), linea);
             }
           // fall through
-          case 73: break;
+          case 74: break;
           case 30:
             { return new Token(Tokens.litc.ordinal(), yytext(), linea);
             }
           // fall through
-          case 74: break;
+          case 75: break;
           case 31:
             { return new Token(Tokens.tint.ordinal(), yytext(), linea);
             }
           // fall through
-          case 75: break;
+          case 76: break;
           case 32:
             { return new Token(Tokens.eca.ordinal(), yytext(), linea);
             }
           // fall through
-          case 76: break;
+          case 77: break;
           case 33:
             { return new Token(Tokens.tchar.ordinal(), yytext(), linea);
             }
           // fall through
-          case 77: break;
-          case 34:
-            { return new Token(Tokens.ver.ordinal(), yytext(), linea);
-            }
-          // fall through
           case 78: break;
-          case 35:
-            { return new Token(Tokens.ebr.ordinal(), yytext(), linea);
+          case 34:
+            { return new Token(Tokens.read.ordinal(), yytext(), linea);
             }
           // fall through
           case 79: break;
-          case 36:
-            { return new Token(Tokens.fal.ordinal(), yytext(), linea);
+          case 35:
+            { return new Token(Tokens.ver.ordinal(), yytext(), linea);
             }
           // fall through
           case 80: break;
-          case 37:
-            { return new Token(Tokens.tfloat.ordinal(), yytext(), linea);
+          case 36:
+            { return new Token(Tokens.ebr.ordinal(), yytext(), linea);
             }
           // fall through
           case 81: break;
-          case 38:
-            { return new Token(Tokens.ewh.ordinal(), yytext(), linea);
+          case 37:
+            { return new Token(Tokens.fal.ordinal(), yytext(), linea);
             }
           // fall through
           case 82: break;
-          case 39:
-            { return new Token(Tokens.write.ordinal(), yytext(), linea);
+          case 38:
+            { return new Token(Tokens.tfloat.ordinal(), yytext(), linea);
             }
           // fall through
           case 83: break;
-          case 40:
-            { return new Token(Tokens.tString.ordinal(), yytext(), linea);
+          case 39:
+            { return new Token(Tokens.ewh.ordinal(), yytext(), linea);
             }
           // fall through
           case 84: break;
-          case 41:
-            { return new Token(Tokens.esw.ordinal(), yytext(), linea);
+          case 40:
+            { return new Token(Tokens.write.ordinal(), yytext(), linea);
             }
           // fall through
           case 85: break;
-          case 42:
-            { return new Token(Tokens.tboolean.ordinal(), yytext(), linea);
+          case 41:
+            { return new Token(Tokens.tString.ordinal(), yytext(), linea);
             }
           // fall through
           case 86: break;
-          case 43:
-            { return new Token(Tokens.ede.ordinal(), yytext(), linea);
+          case 42:
+            { return new Token(Tokens.esw.ordinal(), yytext(), linea);
             }
           // fall through
           case 87: break;
-          case 44:
-            { return new Token(Tokens.pro.ordinal(), yytext(), linea);
+          case 43:
+            { return new Token(Tokens.tboolean.ordinal(), yytext(), linea);
             }
           // fall through
           case 88: break;
+          case 44:
+            { return new Token(Tokens.ede.ordinal(), yytext(), linea);
+            }
+          // fall through
+          case 89: break;
+          case 45:
+            { return new Token(Tokens.pro.ordinal(), yytext(), linea);
+            }
+          // fall through
+          case 90: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

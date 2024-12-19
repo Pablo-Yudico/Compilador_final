@@ -51,5 +51,6 @@ public enum Tokens {
     litc, //38 literal char (debe estar delimitado por comillas simples y solo tener un caracter en su interior)
     ver, //39 true
     fal, //40 false
-    terminador, //41 El inicio y fin marcado por el $
+    read, //41 read
+    terminador, //42 El inicio y fin marcado por el $
 }

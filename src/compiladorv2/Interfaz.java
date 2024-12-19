@@ -46,6 +46,7 @@ public class Interfaz extends javax.swing.JFrame {
     public static List<String> errores;
     List<String> columnas = new ArrayList<>();
     List<List<String>> matriz = new ArrayList<>();
+     List<List<String>> producciones = new ArrayList<>();
     List<List<String>> matriz_semantica;
     String codigo_intermedio;
     List<Token> tokens;
@@ -141,9 +142,10 @@ public class Interfaz extends javax.swing.JFrame {
         // Llamar a un método para procesar los tokens
         procesarTokens(lexer);
 
-        if (!tokens.isEmpty())
-            tokens.add(new Token(41, "$", tokens.getLast().Linea()));
-        Area_Lexico.setText(Area_Lexico.getText() + 41 +"\t" + "$"+"\t" + tokens.getLast().Linea());
+        if (!tokens.isEmpty()){
+            tokens.add(new Token(columnas.indexOf("$"), "$", tokens.getLast().Linea()));
+            Area_Lexico.setText(Area_Lexico.getText() + columnas.indexOf("$") +"\t" + "$"+"\t" + tokens.getLast().Linea());
+        }
         if (!errores.isEmpty()) {
             System.out.println("Hay errores");
             Area_Errores.setText("Errores léxicos encontrados");
@@ -212,6 +214,32 @@ public class Interfaz extends javax.swing.JFrame {
         } catch (IOException e) {
             System.err.println("No se encontró el archivo: " + e.getMessage());
         }
+        
+        
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Omen\\Documents\\Escuela\\7mo\\Autómatas II\\Compilador equipo\\Producciones.csv"))) {
+
+
+            //Aquí leemos los estados y la matriz
+            while ((linea = br.readLine()) != null) {
+                String[] valores = linea.split(sep);
+                ArrayList<String> fila = new ArrayList<>();
+                for (int i = 0; i < valores.length; i++) {
+                    fila.add(valores[i]);
+                }
+                producciones.add(fila);
+
+            }
+            
+            //Mostramos los datos
+            System.out.println("Producciones cargadas\n");
+            for (List<String> fila : producciones){ 
+                 System.out.println("");
+                for (String elemento : fila) 
+                    System.out.print(elemento + "\t"); 
+             }
+        } catch (IOException e) {
+            System.err.println("No se encontró el archivo: " + e.getMessage());
+        }
 
         
 
@@ -220,30 +248,6 @@ public class Interfaz extends javax.swing.JFrame {
     public void Sintactico() {
         
         
-        String[][] producciones = 
-        {
-            {"P" , "Tipo" , "id" , "V"},       //P1
-            {"P" , "A"},                       //P2
-            {"Tipo" , "int"},                  //P3
-            {"Tipo" , "float"},                //P4
-            {"Tipo" , "char"},                 //P5
-            {"V" , "," , "id" , "V"},          //P6
-            {"V" , ";", "P"},                  //P7
-            {"A" , "id" , "=" , "Exp" , ";"},  //P8
-            {"Exp" , "+" , "Term" , "E"},      //P9
-            {"Exp" , "-" , "Term" , "E"},      //P10
-            {"Exp" , "Term" , "E"},            //P11
-            {"E" , "+" , "Term" , "E"},        //P12
-            {"E" , "-" , "Term" , "E"},        //P13
-            {"E" , ""},                        //P14
-            {"Term" , "F" , "T"},              //P15
-            {"T" , "*" , "F" , "T"},           //P16
-            {"T" , "/" , "F" , "T"},           //P17
-            {"T" , ""},                        //P18
-            {"F" , "id"},                      //P19
-            {"F" , "num"},                     //P20
-            {"F" , "(", "Exp", ")"}            //P21
-        };
         
         
         
@@ -274,7 +278,7 @@ public class Interfaz extends javax.swing.JFrame {
             tok = tokens.get(numtoken);
             
 
-            System.out.println("Nueva acción\nPosicion: I" + estado + ", Simbolo(" + columnas.get(tok.Tipo()) + ") en columna: " + tok.Tipo());
+            System.out.println("\nNueva acción\nPosicion: I" + estado + ", Simbolo(" + columnas.get(tok.Tipo()) + ") en columna: " + tok.Tipo());
             if (tok.Tipo() != -1) {
 
                 if(tok.Tipo() >= matriz.get(estado).size())
@@ -296,7 +300,7 @@ public class Interfaz extends javax.swing.JFrame {
                 if (accion.startsWith("P")) {
                     if(accion.equals("P0"))
                     {
-                        
+                        /*
                         System.out.println("Datos de la matriz semántica:\nVar\tTipo\tCodigo\n"+matriz_semantica.get(0).size()+"\t"+matriz_semantica.get(1).size());
                         for(int x = matriz_semantica.get(0).size()-1; x>=0;x--)
                             System.out.println(matriz_semantica.get(0).get(x)+"\t"+tipos_guia[Integer.parseInt(matriz_semantica.get(1).get(x))]+"\t"+matriz_semantica.get(1).get(x));
@@ -306,32 +310,32 @@ public class Interfaz extends javax.swing.JFrame {
                         
                         if(!valido)
                             break;
-                        
+                        */
                         System.out.println("Cadena aceptada.");
                         Area_Errores.setText("Cadena aceptada.");
                         break;
                     }
                     
                     ppro = Integer.parseInt(accion.substring(1)) -1; //Le restamos 1 porque no ponemos la producción 0, así que se recorren los números
-                    produccion = producciones[ppro][0];
+                    produccion = producciones.get(ppro).get(0);
                     
 
-                    if(!producciones[ppro][1].isBlank())
+                    if(!producciones.get(ppro).get(1).equals("?"))
                     {
                         String pop;
-                        for(int x = (producciones[ppro].length - 1) * 2; x > 0; x--) 
+                        for(int x = (producciones.get(ppro).size() - 1) * 2; x > 0; x--) 
                              pop = pila.pop();
                         MostrarPila(pila);
                     
                     }
                     estado = Integer.parseInt(pila.peek());
-                    System.out.println("Terminó la reducción de "+((producciones[ppro].length - 1) * 2)+"\nEl estado en la cima es :"+estado);
+                    System.out.println("Terminó la reducción de "+((producciones.get(ppro).size() - 1 ) * 2)+"\nEl estado en la cima es :"+estado);
                     pila.push(produccion);
                     //
                     //Buscar la ACCION en la tabla 
                     if (columnas.indexOf(produccion) != -1) {
                         accion = matriz.get(estado).get(columnas.indexOf(produccion));
-                        System.out.println("La acción después de la reducción es: "+accion);
+                        System.out.println("\nLa acción después de la reducción es: "+accion);
                         
                         if (accion.equals("")) {
                             System.out.println("Error sintáctico - Linea "+tok.Linea()+" - Se esperaba: "+ Validos(estado));
@@ -353,7 +357,7 @@ public class Interfaz extends javax.swing.JFrame {
                         //INTERVENCIÓN DEL SEMÁNTICO
                 
                 
-                
+                /*
                 switch(tok.Tipo())
                 {
                     case 6: //;
@@ -375,7 +379,7 @@ public class Interfaz extends javax.swing.JFrame {
                 
                 if(!valido)
                     break;
-                
+                */
                 
                 }
             } else {
@@ -655,13 +659,12 @@ public class Interfaz extends javax.swing.JFrame {
     {
         String val="";
         List<String> estado = matriz.get(est);
-        for(String elemento : estado)
+        for(int x = 0; x < estado.size();x++)
         {
-            if(estado.indexOf(elemento) >= columnas.indexOf("$"))
+            if(x >= columnas.indexOf("$"))
                 return val;
-            if(!elemento.isBlank())
-                val+= columnas.get(estado.indexOf(elemento))+" ";
-            
+            if(!estado.get(x).isBlank())
+                val+= columnas.get(x)+" ";
         }
         return val;
     }

@@ -28,6 +28,7 @@ salto=[\n]
 "break" { return new Token(Tokens.ebr.ordinal(), yytext(), linea); }
 "true" { return new Token(Tokens.ver.ordinal(), yytext(), linea); }
 "false" { return new Token(Tokens.fal.ordinal(), yytext(), linea); }
+"read" { return new Token(Tokens.read.ordinal(), yytext(), linea); }
 
 "=" { return new Token(Tokens.igual.ordinal(), yytext(), linea); }
 "+" { return new Token(Tokens.sum.ordinal(), yytext(), linea); }
