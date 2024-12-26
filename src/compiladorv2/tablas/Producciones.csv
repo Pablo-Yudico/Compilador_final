@@ -1,0 +1,48 @@
+P	program	id	{	I	}					
+I	Tipo	id	V							
+I	A 									
+Tipo	int									
+Tipo	float									
+Tipo	char									
+Tipo	String									
+Tipo	boolean									
+V	,	id	V							
+V	;	I								
+A	id	=	L	;	A					
+A	switch	(	L	)	{	C	}	A		
+A	do	{	A	}	while	(	L	)	;	A
+A	write	(	L	)	;	A				
+A	?									
+C	case	L	:	A	D	C				
+C	default	:	A							
+D	break	;								
+D	?									
+L	!	L								
+L	L	&	R							
+L	L	|	R							
+L	R									
+R	R	>	S							
+R	R	<	S							
+R	R	<=	S							
+R	R	>=	S							
+R	R	==	S							
+R	R	!=	S							
+R	S									
+S	+	E								
+S	-	E								
+S	E									
+E	E	+	T							
+E	E	-	T							
+E	T									
+T	T	*	F							
+T	T	/	F							
+T	F									
+F	(	L	)							
+F	id									
+F	numf									
+F	nume									
+F	lits									
+F	litc									
+F	true									
+F	false									
+F	read	(	L	)						

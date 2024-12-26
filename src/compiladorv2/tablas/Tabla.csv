@@ -1,0 +1,111 @@
+	program	id	int	float	char	String	boolean	switch	do	while	,	;	=	(	)	{	}	write	case	:	default	break	!	&	|	<	>	<=	>=	==	!=	+	-	*	/	numf	nume	lits	litc	true	false	read	$	P	I	Tipo	V	A	C	D	L	R	S	E	T	F
+I0	I2																																											I1												
+I1																																											P0													
+I2		I3																																																						
+I3																I4																																								
+I4		I13	I8	I9	I10	I11	I12	I14	I15								P15	I16	P15		P15	P15																							I5	I6		I7								
+I5																	I17																																							
+I6		I18																																																						
+I7																	P3																																							
+I8		P4																																																						
+I9		P5																																																						
+I10		P6																																																						
+I11		P7																																																						
+I12		P8																																																						
+I13													I19																																											
+I14														I20																																										
+I15																I21																																								
+I16														I22																																										
+I17																																											P1													
+I18											I24	I25																																			I23									
+I19		I36												I35									I27									I30	I31			I37	I38	I39	I40	I41	I42	I43									I26	I28	I29	I32	I33	I34
+I20		I36												I35									I27									I30	I31			I37	I38	I39	I40	I41	I42	I43									I44	I28	I29	I32	I33	I34
+I21		I13						I14	I15								P15	I16	P15		P15	P15																										I45								
+I22		I36												I35									I27									I30	I31			I37	I38	I39	I40	I41	I42	I43									I46	I28	I29	I32	I33	I34
+I23																	P2																																							
+I24		I47																																																						
+I25		I13	I8	I9	I10	I11	I12	I14	I15								P15	I16	P15		P15	P15																							I48	I6		I7								
+I26												I49												I50	I51																															
+I27																																																			I52					
+I28												P23			P23					P23				P23	P23	I53	I54	I55	I56	I57	I58																									
+I29												P30			P30					P30				P30	P30	P30	P30	P30	P30	P30	P30																									
+I30																																																						I59		
+I31																																																						I60		
+I32												P33			P33					P33				P33	P33	P33	P33	P33	P33	P33	P33	I61	I62																							
+I33												P36			P36					P36				P36	P36	P36	P36	P36	P36	P36	P36	P36	P36	I63	I64																					
+I34												P39			P39					P39				P39	P39	P39	P39	P39	P39	P39	P39	P39	P39	P39	P39																					
+I35		I36												I35									I27									I30	I31			I37	I38	I39	I40	I41	I42	I43									I65	I28	I29	I32	I33	I34
+I36												P41			P41					P41				P41	P41	P41	P41	P41	P41	P41	P41	P41	P41	P41	P41																					
+I37												P42			P42					P42				P42	P42	P42	P42	P42	P42	P42	P42	P42	P42	P42	P42																					
+I38												P43			P43					P43				P43	P43	P43	P43	P43	P43	P43	P43	P43	P43	P43	P43																					
+I39												P44			P44					P44				P44	P44	P44	P44	P44	P44	P44	P44	P44	P44	P44	P44																					
+I40												P45			P45					P45				P45	P45	P45	P45	P45	P45	P45	P45	P45	P45	P45	P45																					
+I41												P46			P46					P46				P46	P46	P46	P46	P46	P46	P46	P46	P46	P46	P46	P46																					
+I42												P47			P47					P47				P47	P47	P47	P47	P47	P47	P47	P47	P47	P47	P47	P47																					
+I43														I66																																										
+I44															I67									I50	I51																															
+I45																	I68																																							
+I46															I69									I50	I51																															
+I47											I24	I25																																			I70									
+I48																	P10																																							
+I49		I13						I14	I15								P15	I16	P15		P15	P15																										I71								
+I50		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43										I72	I29	I32	I33	I34
+I51		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43										I73	I29	I32	I33	I34
+I52												P20			P20					P20				P20	P20																															
+I53		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43											I74	I32	I33	I34
+I54		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43											I75	I32	I33	I34
+I55		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43											I76	I32	I33	I34
+I56		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43											I77	I32	I33	I34
+I57		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43											I78	I32	I33	I34
+I58		I36												I35																		I30	I31			I37	I38	I39	I40	I41	I42	I43											I79	I32	I33	I34
+I59												P31			P31					P31				P31	P31	P31	P31	P31	P31	P31	P31																									
+I60												P32			P32					P32				P32	P32	P32	P32	P32	P32	P32	P32																									
+I61		I36												I35																						I37	I38	I39	I40	I41	I42	I43													I80	I34
+I62		I36												I35																						I37	I38	I39	I40	I41	I42	I43													I81	I34
+I63		I36												I35																						I37	I38	I39	I40	I41	I42	I43														I82
+I64		I36												I35																						I37	I38	I39	I40	I41	I42	I43														I83
+I65															I84									I50	I51																															
+I66		I36												I35									I27									I30	I31			I37	I38	I39	I40	I41	I42	I43									I85	I28	I29	I32	I33	I34
+I67																I86																																								
+I68										I87																																														
+I69												I88																																												
+I70																	P9																																							
+I71																	P11		P11		P11	P11																																		
+I72												P21			P21					P21				P21	P21	I53	I54	I55	I56	I57	I58																									
+I73												P22			P22					P22				P22	P22	I53	I54	I55	I56	I57	I58																									
+I74												P24			P24					P24				P24	P24	P24	P24	P24	P24	P24	P24																									
+I75												P25			P25					P25				P25	P25	P25	P25	P25	P25	P25	P25																									
+I76												P26			P26					P26				P26	P26	P26	P26	P26	P26	P26	P26																									
+I77												P27			P27					P27				P27	P27	P27	P27	P27	P27	P27	P27																									
+I78												P28			P28					P28				P28	P28	P28	P28	P28	P28	P28	P28																									
+I79												P29			P29					P29				P29	P29	P29	P29	P29	P29	P29	P29																									
+I80												P34			P34					P34				P34	P34	P34	P34	P34	P34	P34	P34	P34	P34	I63	I64																					
+I81												P35			P35					P35				P35	P35	P35	P35	P35	P35	P35	P35	P35	P35	I63	I64																					
+I82												P37			P37					P37				P37	P37	P37	P37	P37	P37	P37	P37	P37	P37	P37	P37																					
+I83												P38			P38					P38				P38	P38	P38	P38	P38	P38	P38	P38	P38	P38	P38	P38																					
+I84												P40			P40					P40				P40	P40	P40	P40	P40	P40	P40	P40	P40	P40	P40	P40																					
+I85															I89																																									
+I86																			I91		I92																												I90							
+I87														I93																																										
+I88		I13						I14	I15								P15	I16	P15		P15	P15																										I94								
+I89												P48			P48					P48				P48	P48	P48	P48	P48	P48	P48	P48	P48	P48	P48	P48																					
+I90																	I95																																							
+I91		I36												I35									I27									I30	I31			I37	I38	I39	I40	I41	I42	I43									I96	I28	I29	I32	I33	I34
+I92																				I97																																				
+I93		I36												I35									I27									I30	I31			I37	I38	I39	I40	I41	I42	I43									I98	I28	I29	I32	I33	I34
+I94																	P14		P14		P14	P14																																		
+I95		I13						I14	I15								P15	I16	P15		P15	P15																										I99								
+I96																				I100				I50	I51																															
+I97		I13						I14	I15								P15	I16	P15		P15	P15																										I101								
+I98															I102									I50	I51																															
+I99																	P12		P12		P12	P12																																		
+I100								I14	I15								P15	I16	P15		P15	P15																										I103								
+I101																	P17																																							
+I102												I104																																												
+I103																			P19		P19	I106																												I105						
+I104								I14	I15								P15	I16	P15		P15	P15																										I107								
+I105																			I91		I92																												I108							
+I106												I109																																												
+I107																	P13		P13		P13	P13																																		
+I108																	P16																																							
+I109																			P18		P18																																			
