@@ -1,0 +1,24 @@
+program Ejemp {
+	String a ;
+	int b ;
+	int c ;
+	write ( "Vamos a usar el do-while" );
+	
+	b = 1 ;
+
+	do
+	{
+		write("Vez " + b);
+		b = b + 1;
+	} while(b < 4);
+
+	write ( "Vamos de regreso" );
+	
+	do
+	{
+		write("Cuenta " + b);
+		b = b - 1;
+	} while( b != 0);
+
+
+}

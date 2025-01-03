@@ -1,0 +1,8 @@
+program Ejemp {
+	String a ;
+	int b , d ;
+	int c ;
+	b = d ;
+
+
+}

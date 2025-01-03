@@ -1,0 +1,29 @@
+program Ejemp {
+	String a ;
+	int b ;
+	int c ;
+	a = read( "Variable" + 1 ) + 5 ;
+
+	switch (a)
+	{
+		case read("Primero") :
+			write("Uno");
+			break;
+		case "dos" :
+			write("Dos");
+			break;
+		case "tres" :
+			write("Tres");
+			break;
+		default:
+			write("Nada");
+	}
+
+	do
+	{
+		write("Vez " + b);
+		b = b - 1;
+	} while(b < 3);
+
+
+}

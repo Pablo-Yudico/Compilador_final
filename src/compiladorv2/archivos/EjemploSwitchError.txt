@@ -1,0 +1,23 @@
+program Ejemp {
+	String a ;
+	int b ;
+	int c ;
+	a = read( "Variable" + 1 ) + 5 ;
+
+	switch (a)
+	{
+		case 3 :
+			write("Uno");
+			break;
+		case "dos" :
+			write("Dos");
+			break;
+		case "tres" :
+			write("Tres");
+			break;
+		default:
+			write("Nada");
+	}
+
+
+}

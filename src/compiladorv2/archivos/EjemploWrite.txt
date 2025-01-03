@@ -1,0 +1,13 @@
+program Ejemp {
+	String a ;
+	int b ;
+	int c ;
+	a = read( "Variable" + 1 ) + 5 ;
+
+	write("Vez " + b);
+
+	a = read( "Intento" + 1 + ":" ) ;
+
+	write("Salio:  " + a);
+
+}

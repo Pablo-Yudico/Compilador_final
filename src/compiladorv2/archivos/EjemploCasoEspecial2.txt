@@ -1,0 +1,6 @@
+program Ejemp {
+	String a ;
+	int b ;
+	int c ;
+	a = read( "Variable" + 1 ) + read(" y el final" +2) ;
+}

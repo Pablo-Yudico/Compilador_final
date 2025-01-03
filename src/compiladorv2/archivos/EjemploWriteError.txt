@@ -1,0 +1,10 @@
+program Ejemp {
+	String a ;
+	int b ;
+	int c ;
+	a = read( "Variable" + 1 ) + 5 ;
+
+	write(3 + b);
+
+
+}

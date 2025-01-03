@@ -42,25 +42,26 @@ public class Interfaz extends javax.swing.JFrame {
         jScrollPane1.setRowHeaderView(lineNumber);
         CargarTabla();
     }
-    
-    
-    
+
     URL resource;
     File ubicacion;
     ImageIcon bien = new ImageIcon(getClass().getResource("/Compiladorv2/img/check.png"));
     ImageIcon mal = new ImageIcon(getClass().getResource("/Compiladorv2/img/error.png"));
     ClassLoader classLoader = getClass().getClassLoader();
-    
+
     public static List<String> errores;
     List<String> columnas = new ArrayList<>();
     List<List<String>> matriz = new ArrayList<>();
-     List<List<String>> producciones = new ArrayList<>();
+    List<List<String>> producciones = new ArrayList<>();
     List<List<String>> matriz_semantica;
     String codigo_intermedio;
     List<Token> tokens;
     Stack<String> operadores;
     Stack<String> posfija;
-    int numw=1, nums=1, numc = 1;
+    int numw = 0, nums = 0, numc = 1;
+    int[] conta = {0, 0, 0, 0, 0};
+    int[] contad = {0, 0, 0, 0, 0};
+    int tab = 0;
 
     //Métodos agregados
     public void Vaciar() {
@@ -75,13 +76,12 @@ public class Interfaz extends javax.swing.JFrame {
         Selector.setCurrentDirectory(ubicacion);
         Selector.setSelectedFile(null);
         codigo_intermedio = "";
-        numw=1;
-        nums=1;
-        
+        numw = 1;
+        nums = 1;
+
     }
-    
-    public void Reiniciar()
-    {
+
+    public void Reiniciar() {
         //Arreglos
         operadores = new Stack<>();
         posfija = new Stack<>();
@@ -91,17 +91,24 @@ public class Interfaz extends javax.swing.JFrame {
         matriz_semantica = new ArrayList<>();
         matriz_semantica.add(new ArrayList<>());
         matriz_semantica.add(new ArrayList<>());
-        
+
         codigo_intermedio = "";
-        numw=1;
-        nums=1;
-        
+        numw = 0;
+        nums = 0;
+        tab = 0;
+
+        for (int x = 0; x < 5; x++) {
+            conta[x] = 0;
+            contad[x] = 0;
+        }
+
         //Ventana
         Area_Lexico.setText("Tipo\tLexema\tLinea\n");
         Area_Sintactico.setText("");
     }
 
     public void Seleccionar() {
+        Selector.setCurrentDirectory(ubicacion);
         Selector.setDialogTitle("Abrir archivo");
         Selector.setFileFilter(new FileNameExtensionFilter("Archivos de texto", "txt"));
 
@@ -150,7 +157,7 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     public void Lexico() {
-        
+
         Reiniciar();
 
         // Crear una instancia del lexer
@@ -159,9 +166,9 @@ public class Interfaz extends javax.swing.JFrame {
         // Llamar a un método para procesar los tokens
         procesarTokens(lexer);
 
-        if (!tokens.isEmpty()){
+        if (!tokens.isEmpty()) {
             tokens.add(new Token(columnas.indexOf("$"), "$", tokens.getLast().Linea()));
-            Area_Lexico.setText(Area_Lexico.getText() + columnas.indexOf("$") +"\t" + "$"+"\t" + tokens.getLast().Linea());
+            Area_Lexico.setText(Area_Lexico.getText() + columnas.indexOf("$") + "\t" + "$" + "\t" + tokens.getLast().Linea());
         }
         if (!errores.isEmpty()) {
             System.out.println("Hay errores");
@@ -169,18 +176,17 @@ public class Interfaz extends javax.swing.JFrame {
             for (String error : errores) {
                 Area_Errores.setText(Area_Errores.getText() + "\n" + error);
             }
-        }
-        else
+        } else
             Sintactico();
     }
-    
+
     private void procesarTokens(Lexer lexer) {
         Token token;
         try {
             // Extraer tokens hasta que no haya más
             while ((token = lexer.yylex()) != null) {
                 // Mostrar el tipo y el texto del token
-                Area_Lexico.setText(Area_Lexico.getText() + token.Tipo() + "\t" + token.Lexema()+"\t" + token.Linea()+"\n");
+                Area_Lexico.setText(Area_Lexico.getText() + token.Tipo() + "\t" + token.Lexema() + "\t" + token.Linea() + "\n");
                 tokens.add(token);
             }
         } catch (Exception e) {
@@ -219,23 +225,24 @@ public class Interfaz extends javax.swing.JFrame {
                 matriz.add(fila);
 
             }
-            
+
             //Mostramos los datos
             System.out.println("Tabla cargada\n");
-            for(String elemento:columnas)
-                System.out.print(elemento+"\t");
-             for (List<String> fila : matriz){ 
-                 System.out.println("");
-                for (String elemento : fila) 
-                    System.out.print(elemento + "\t"); 
-             }
+            for (String elemento : columnas) {
+                System.out.print(elemento + "\t");
+            }
+            for (List<String> fila : matriz) {
+                System.out.println("");
+                for (String elemento : fila) {
+                    System.out.print(elemento + "\t");
+                }
+            }
         } catch (IOException e) {
             System.err.println("No se encontró el archivo: " + e.getMessage());
         }
-        
+
         resource = classLoader.getResource("compiladorv2/tablas/Producciones.csv");
         try (BufferedReader br = new BufferedReader(new FileReader(resource.getPath()))) {
-
 
             //Aquí leemos los estados y la matriz
             while ((linea = br.readLine()) != null) {
@@ -247,43 +254,43 @@ public class Interfaz extends javax.swing.JFrame {
                 producciones.add(fila);
 
             }
-            
+
             //Mostramos los datos
             System.out.println("Producciones cargadas\n");
-            for (List<String> fila : producciones){ 
-                 System.out.println("");
-                for (String elemento : fila) 
-                    System.out.print(elemento + "\t"); 
-             }
+            for (List<String> fila : producciones) {
+                System.out.println("");
+                for (String elemento : fila) {
+                    System.out.print(elemento + "\t");
+                }
+            }
         } catch (IOException e) {
             System.err.println("No se encontró el archivo: " + e.getMessage());
         }
 
-        
-
     }
 
     public void Sintactico() {
-        
+
         //Inicializar
         Stack<String> pila = new Stack<>();
         int estado = 0;
         String accion;
-        
-        int tipo= -1;
+
+        int tipo = -1;
         boolean asignacion = false; //Variable para identifiar si estamos en las asignaciones
         boolean valido = true;
         boolean exp = false;
         boolean primero = true;
+        boolean ssc = false;
         Token buscar = new Token(42, "Error", 0);
         Token vswitch = new Token(7, "valSwitch", 0);
         List<Token> expresion = new ArrayList<>();
-        
+
         pila.push("$"); // Estado inicial
         pila.push("0"); // Estado inicial
-        
+
         MostrarPila(pila);
-        
+
         Token tok;
         String produccion;
         int ppro;
@@ -293,306 +300,345 @@ public class Interfaz extends javax.swing.JFrame {
         while (!pila.empty()) {
 
             tok = tokens.get(numtoken);
-            
 
             //System.out.println("\nNueva acción\nPosicion: I" + estado + ", Simbolo(" + columnas.get(tok.Tipo()) + ") en columna: " + tok.Tipo());
             if (tok.Tipo() != -1) {
 
-                if(tok.Tipo() >= matriz.get(estado).size())
-                {    
-                    Error("Error sintáctico - Linea "+tok.Linea()+" - Se esperaba: "+ Validos(estado));
+                if (tok.Tipo() >= matriz.get(estado).size()) {
+                    Error("Error sintáctico - Linea " + tok.Linea() + " - Se esperaba: " + Validos(estado));
                     break;
                 }
                 accion = matriz.get(estado).get(tok.Tipo());
-                
+
                 if (accion.equals("")) {
-                    Error("Error sintáctico - Linea "+tok.Linea()+" - Se esperaba: "+ Validos(estado));
+                    Error("Error sintáctico - Linea " + tok.Linea() + " - Se esperaba: " + Validos(estado));
                     break;
                 }
                 //System.out.println("Accion: " + accion);
-                
-                
+
                 //Checar si es desplazamiento(I) o reducción(P)
                 if (accion.startsWith("P")) {
-                    if(accion.equals("P0"))
-                    {
-                        
-                        
+                    if (accion.equals("P0")) {
+
                         //Declaración de las variables
-                        String intermedio="Codigo intermedio\n";
-                        for(int x = 0 ;x < matriz_semantica.get(0).size();x++)
-                            intermedio+= Tipo(Integer.parseInt(matriz_semantica.get(1).get(x)))+" "+matriz_semantica.get(0).get(x)+";\n";
+                        String intermedio = "Codigo intermedio\n\n#include <stdio.h>\n#include <stdbool.h>\n#include <string.h>\n\nint main()\n{\n";
+
+                        matriz_semantica.get(0).add("whileCon");
+                        matriz_semantica.get(1).add("4");
+                        for (int x = 0; x <= 4; x++) {
+                            while (contad[x] > 0) {
+                                switch (x) {
+                                    case 0:
+                                        matriz_semantica.get(0).add("Vd" + contad[x]);
+                                        matriz_semantica.get(1).add("" + x);
+                                        break;
+                                    case 1:
+                                        matriz_semantica.get(0).add("Vf" + contad[x]);
+                                        matriz_semantica.get(1).add("" + x);
+                                        break;
+                                    case 2:
+                                        matriz_semantica.get(0).add("Vs" + contad[x]);
+                                        matriz_semantica.get(1).add("" + x);
+                                        break;
+                                    case 3:
+                                        matriz_semantica.get(0).add("Vc" + contad[x]);
+                                        matriz_semantica.get(1).add("" + x);
+                                        break;
+                                    case 4:
+                                        matriz_semantica.get(0).add("Vb" + contad[x]);
+                                        matriz_semantica.get(1).add("" + x);
+                                }
+                                contad[x]--;
+                            }
+                        }
+                        for (int x = 0; x < matriz_semantica.get(0).size(); x++) {
+                            if (matriz_semantica.get(1).get(x).equals("-1"))
+                                continue;
+                            if (matriz_semantica.get(1).get(x).equals("2"))
+                                intermedio += "\tchar " + matriz_semantica.get(0).get(x) + "[30];\n";
+                            else
+                                intermedio += "\t" + Tipo(Integer.parseInt(matriz_semantica.get(1).get(x))) + " " + matriz_semantica.get(0).get(x) + ";\n";
+                        }
+
                         codigo_intermedio = intermedio + codigo_intermedio;
-                        
+                        codigo_intermedio += "\n\treturn 0;\n}\n";
                         System.out.println(codigo_intermedio);
-                        
+
                         Error("Cadena aceptada."); //Solo aprovechamos el método, aunque no sea realmente un error
                         break;
                     }
-                    
-                    ppro = Integer.parseInt(accion.substring(1)) -1; //Le restamos 1 porque no ponemos la producción 0, así que se recorren los números
-                    produccion = producciones.get(ppro).get(0);
-                    
 
-                    if(!producciones.get(ppro).get(1).equals("?"))
-                    {
+                    ppro = Integer.parseInt(accion.substring(1)) - 1; //Le restamos 1 porque no ponemos la producción 0, así que se recorren los números
+                    produccion = producciones.get(ppro).get(0);
+
+                    if (!producciones.get(ppro).get(1).equals("?")) {
                         String pop;
-                        for(int x = (producciones.get(ppro).size() - 1) * 2; x > 0; x--) 
-                             pop = pila.pop();
+                        for (int x = (producciones.get(ppro).size() - 1) * 2; x > 0; x--) {
+                            pop = pila.pop();
+                        }
                         MostrarPila(pila);
-                    
+
                     }
                     estado = Integer.parseInt(pila.peek());
                     pila.push(produccion);
-                    
+
                     //Buscar la ACCION en la tabla 
                     if (columnas.indexOf(produccion) != -1) {
                         accion = matriz.get(estado).get(columnas.indexOf(produccion));
-                        
+
                         if (accion.equals("")) {
-                            Error("Error sintáctico - Linea "+tok.Linea()+" - Se esperaba: "+ Validos(estado));
+                            Error("Error sintáctico - Linea " + tok.Linea() + " - Se esperaba: " + Validos(estado));
                             break;
                         }
                         pila.push(accion.substring(1));
                         estado = Integer.parseInt(accion.substring(1));
                     }
-                    
-                } else if (accion.startsWith("I")) { 
-                    
-                        estado = Integer.parseInt(accion.substring(1));
-                        pila.add(columnas.get(tok.Tipo()));
-                        pila.add(estado+"");
-                        numtoken ++;
-                        
-                        
-                        //INTERVENCIÓN DEL SEMÁNTICO
-                switch(tok.Tipo())
-                {
-                    
-                    case 2: //int
-                    case 3: //float
-                    case 4: //String
-                    case 5: //char
-                    case 6: //boolean
-                        tipo = 0;
-                        valido = Semantico(tok, tipo);
-                        break;
-                    case 20: //default
-                        codigo_intermedio +="case"+numc+":\n";
-                        break;
-                    case 21 : //break
-                        codigo_intermedio +="\tgoto finSwitch"+nums+"\n"; 
-                        break;
-                    case 8: //do
-                        codigo_intermedio +="etqWhile"+numw+":\n";
-                        break;
-                    case 19 : //:
-                        if(tipo == 2)
-                        {
-                            System.out.println("Se obtendrá el valor del case");
-                            codigo_intermedio +="case"+numc+":\n";
-                            buscar = Evaluar(expresion, vswitch);
-                            IncCase();
-                            codigo_intermedio +="if (! (V1 == valSwitch))\n\tgoto case"+numc+"\n"; 
-                            if(buscar.Lexema().equals("Error"))
-                                valido = false;
-                            System.out.println("El resultado fue "+Tipo(Tipoinv(buscar.Tipo())));
-                            tipo = 1;
-                            break;
-                        }
-                        break;
-                    case 15: //{
-                        if(tipo == 2)
-                        {
-                            System.out.println("Se obtendrá el valor del switch");
-                            vswitch = Evaluar(expresion, new Token(7, "valSwitch", tok.Linea()));
-                            if(vswitch.Lexema().equals("Error"))
-                                valido = false;
-                            System.out.println("El resultado fue "+Tipo(Tipoinv(vswitch.Tipo())));
-                            tipo = 1;
-                            break;
-                        }
-                        break;
-                        
-                    case 11: //;
-                        asignacion = true;
-                        primero = true;
-                        exp = true;
-                        
-                        if(tipo == 3)
-                        {
-                            System.out.println("Se evaluará la expresión de un while");
-                            buscar = Evaluar(expresion, new Token(40, "whileCon", tok.Linea()));
-                            if(buscar.Lexema().equals("Error"))
-                                valido = false;
-                            System.out.println("El resultado fue "+buscar.Lexema());
-                            codigo_intermedio +="if (whileCon)\n\tgoto etqWhile"+numw+"\n"; 
-                            IncWhile();
-                            tipo = 1;
-                            break;
-                        }
-                        
-                        if(tipo == 4)
-                        {
-                            System.out.println("Se evaluará la expresión de un write");
-                            buscar = Evaluar(expresion, new Token(37, "expWrite", tok.Linea()));
-                            if(buscar.Lexema().equals("Error"))
-                                valido = false;
-                            System.out.println("El resultado fue "+buscar.Lexema());
-                            codigo_intermedio +="printf(expWrite);\n";
-                            tipo = 1;
-                            break;
-                        }
-                        
-                        tipo = 1;
-                        
-                        if(!expresion.isEmpty()){
-                            if(Evaluar(expresion, buscar).Lexema().equals("Error"))
-                                valido = false;
-                            break;
-                        }
-                        
-                        break;
-                    case 7: //switch
-                        numc = 1;
-                    case 18: //case
-                        asignacion = false;
-                        primero = false;
-                        exp = true;
-                        expresion = new ArrayList<>();
-                        tipo = 2;
-                        break;
-                    case 9: //while
-                        asignacion = false;
-                        primero = true;
-                        exp = true;
-                        tipo = 3;
-                        break;
-                    case 17: // write
-                        asignacion = false;
-                        primero = true;
-                        exp = true;
-                        tipo = 4;
-                        break;
-                    default:
-                        
-                        if(tok.Tipo() == 1){
+
+                } else if (accion.startsWith("I")) {
+
+                    estado = Integer.parseInt(accion.substring(1));
+                    pila.add(columnas.get(tok.Tipo()));
+                    pila.add(estado + "");
+                    numtoken++;
+
+                    //INTERVENCIÓN DEL SEMÁNTICO
+                    switch (tok.Tipo()) {
+
+                        case 2: //int
+                        case 3: //float
+                        case 4: //String
+                        case 5: //char
+                        case 6: //boolean
+                            tipo = 0;
                             valido = Semantico(tok, tipo);
-                            if(tipo == 0)
-                                break;
-                            if(asignacion){
-                                buscar = tok;
-                                asignacion = false;
-                                exp = true;
+                            break;
+                        case 20: //default
+                            Agregar("case" + nums + numc + ":");
+                            tab++;
+                            break;
+                        case 21: //break
+                            tab--;
+                            Agregar("\tgoto finSwitch" + nums+";");
+                            expresion = new ArrayList<>();
+                            break;
+                        case 8: //do
+                            IncWhile();
+                            Agregar("etqWhile" + numw + ":");
+                            break;
+                        case 19: //:
+                            if (tipo == 2) {
+                                System.out.println("\nSe obtendrá el valor del case " + numc);
+                                Agregar("case" + nums + numc + ":");
+                                tab++;
+
+                                buscar = Evaluar(expresion, vswitch);
+
+                                IncCase();
+
+                                //Separar los casos donde valSwitch es cadena o no
+                                if (buscar.Tipo() == 37)
+                                    Agregar("if (strcmp(" + buscar.Lexema() + " , valSwitch" + nums + ") != 0)");
+                                else
+                                    Agregar("if (! (" + buscar.Lexema() + " == valSwitch" + nums + "))");
+
+                                DecVa(Tipoinv(buscar.Tipo()));
+                                Agregar("\tgoto case" + nums + numc + ";");
+                                if (buscar.Lexema().equals("Error"))
+                                    valido = false;
+                                System.out.println("El resultado fue " + Tipo(Tipoinv(buscar.Tipo())));
+                                tipo = 1;
                                 break;
                             }
-                        }
-                        if(exp)
-                        {
-                            if(primero){
-                                expresion = new ArrayList<>();
-                                primero = false;
+                            break;
+                        case 15: //{
+                            tab++;
+                            if (tipo == 2) {
+                                System.out.println("Se obtendrá el valor del switch");
+                                vswitch = Evaluar(expresion, new Token(7, "valSwitch" + nums, tok.Linea()));
+                                matriz_semantica.get(0).add("valSwitch" + nums);
+                                matriz_semantica.get(1).add(Tipoinv(vswitch.Tipo()) + "");
+                                if (vswitch.Lexema().equals("Error"))
+                                    valido = false;
+                                System.out.println("El resultado fue " + Tipo(Tipoinv(vswitch.Tipo())));
+                                tipo = 1;
+                                break;
                             }
-                            else
-                                expresion.add(tok);
-                        }
+                            break;
+
+                        case 16: //}
+                            tab--;
+                            if (ssc) {
+                                Agregar("finSwitch" + nums + ":");
+                                ssc = false;
+                            }
+                            break;
+                        case 11: //;
+                            asignacion = true;
+                            primero = true;
+                            exp = true;
+
+                            if (tipo == 3) {
+                                System.out.println("Se evaluará la expresión de un while");
+                                buscar = Evaluar(expresion, new Token(40, "whileCon", tok.Linea()));
+                                if (buscar.Lexema().equals("Error"))
+                                    valido = false;
+                                System.out.println("El resultado fue " + buscar.Lexema());
+                                Agregar("if (whileCon)");
+                                Agregar("\tgoto etqWhile" + numw + ";");
+                                IncWhile();
+                                tipo = 1;
+                                break;
+                            }
+
+                            if (tipo == 4) {
+                                Agregar("printf(" + Parametro(expresion) + ");");
+                                tipo = 1;
+                                break;
+                            }
+
+                            tipo = 1;
+
+                            if (!expresion.isEmpty()) {
+                                if (Evaluar(expresion, buscar).Lexema().equals("Error"))
+                                    valido = false;
+                                break;
+                            }
+
+                            break;
+                        case 7: //switch
+                            ssc = true;
+                            IncSwitch();
+                            numc = 1;
+                        case 18: //case
+                            asignacion = false;
+                            primero = false;
+                            exp = true;
+                            expresion = new ArrayList<>();
+                            tipo = 2;
+                            break;
+                        case 9: //while
+                            asignacion = false;
+                            primero = true;
+                            exp = true;
+                            tipo = 3;
+                            break;
+                        case 17: // write
+                            asignacion = false;
+                            primero = true;
+                            exp = true;
+                            tipo = 4;
+                            break;
+                        default:
+
+                            if (tok.Tipo() == 1) {
+                                valido = Semantico(tok, tipo);
+                                if (tipo == 0)
+                                    break;
+                                if (asignacion) {
+                                    buscar = tok;
+                                    asignacion = false;
+                                    exp = true;
+                                    break;
+                                }
+                            }
+                            if (exp) {
+                                if (primero) {
+                                    expresion = new ArrayList<>();
+                                    primero = false;
+                                } else
+                                    expresion.add(tok);
+                            }
+                    }
+
+                    if (!valido) {
+                        System.out.println("\nNo fue válido y se debe de enviar a error.\n");
+                        break;
+                    }
+
                 }
-                
-                if(!valido){
-                    System.out.println("\nNo fue válido y se debe de enviar a error.\n");
-                    break;
-                }
-                
-                }
-                       
-            } else 
-                Error("Error sintáctico - Linea "+tok.Linea()+"Se esperaba: "+ Validos(estado));
-             MostrarPila(pila);
-            
+
+            } else
+                Error("Error sintáctico - Linea " + tok.Linea() + "Se esperaba: " + Validos(estado));
+            MostrarPila(pila);
+
         }
-    
+
     }
-    
-    public boolean Semantico(Token ob, int op) 
-    {
-        
-        switch(op)
-        {
+
+    public boolean Semantico(Token ob, int op) {
+
+        switch (op) {
             case -1:
-                if(ob.Tipo() == 1)
-                {
+                if (ob.Tipo() == 1) {
                     matriz_semantica.get(0).add(ob.Lexema());
                     matriz_semantica.get(1).add("-1");
                 }
                 break;
             case 0: //Declaración
-                  switch(ob.Tipo())
-                  {
-                   
+                switch (ob.Tipo()) {
+
                     case 2: //int
                         matriz_semantica.get(1).add("0");
                         break;
-                          
+
                     case 3: //float
                         matriz_semantica.get(1).add("1");
                         break;
-                          
+
                     case 5: //String
                         matriz_semantica.get(1).add("2");
                         break;
-                          
+
                     case 4: //char
                         matriz_semantica.get(1).add("3");
                         break;
                     case 6: //boolean
                         matriz_semantica.get(1).add("4");
                         break;
-                        
-                      case 1: //id
-                          
-                          if(Buscar(ob.Lexema()) != -1)
-                          {
-                              Error("Error semántico - Linea "+ob.Linea()+" - Variable ya declarada: "+ ob.Lexema());
-                              return false;
-                          }
-                              
-                          
-                          if(matriz_semantica.get(0).size() < matriz_semantica.get(1).size()) //Es el caso en el que ya está el tipo pero no la variable
-                              matriz_semantica.get(0).add(ob.Lexema());
-                          else
-                          {
-                              matriz_semantica.get(1).add(matriz_semantica.get(1).getLast());
-                              matriz_semantica.get(0).add(ob.Lexema());
-                          }   
-                          break;                          
-                  }
+
+                    case 1: //id
+
+                        if (Buscar(ob.Lexema()) != -1) {
+                            Error("Error semántico - Linea " + ob.Linea() + " - Variable ya declarada: " + ob.Lexema());
+                            return false;
+                        }
+
+                        if (matriz_semantica.get(0).size() < matriz_semantica.get(1).size()) //Es el caso en el que ya está el tipo pero no la variable
+                            matriz_semantica.get(0).add(ob.Lexema());
+                        else {
+                            matriz_semantica.get(1).add(matriz_semantica.get(1).getLast());
+                            matriz_semantica.get(0).add(ob.Lexema());
+                        }
+                        break;
+                }
                 break;
-                
+
             case 1: //Una asginación
             case 2:
             case 3:
             case 4:
                 //En este caso se va evaluando la valides de las operaciones pero no se declara nada
-                
-                if(ob.Tipo() == 1)
-                    if(Buscar(ob.Lexema()) == -1){
-                        Error("Error semántico - Linea "+ob.Linea()+" - Variable no declarada: "+ ob.Lexema());
+
+                if (ob.Tipo() == 1)
+                    if (Buscar(ob.Lexema()) == -1) {
+                        Error("Error semántico - Linea " + ob.Linea() + " - Variable no declarada: " + ob.Lexema());
                         return false;
-                    }     
-                break;  
-                     
+                    }
+                break;
+
         }
         return true;
-    }  
-    
-    
-    public Token Evaluar(List<Token> expresion, Token buscar)
-    {
+    }
+
+    public Token Evaluar(List<Token> expresion, Token buscar) {
         String cadena = "";
+        String cadv1 = "";
+        String cadv2 = "";
+        String cadv = "";
         Token principal = buscar;
         boolean aux;
-        int var1, var2 = -2, vart=-2, con=0;
-        
+        int var1, var2 = -2, vart = -2, con = 0;
+
         List<Token> subexpresion;
         List<String> c = new ArrayList();
         c.add("(");
@@ -610,231 +656,214 @@ public class Interfaz extends javax.swing.JFrame {
         c.add("&");
         c.add("|");
         c.add("!");
-        
-        
+
         //Apuntador donde la primera posición será fila (lo que llega a la expresión) y la segunda será la columna (lo que sale del peek)
-        int [] ap = {-1, -1}; //Apuntador para el autómata de la pila
-        
+        int[] ap = {-1, -1}; //Apuntador para el autómata de la pila
+
         Stack<Token> pilao = new Stack<Token>(); //Pila de operadores
         Stack<Integer> pilae = new Stack<Integer>(); //Pila de operadores
+        Stack<String> pilas = new Stack<String>(); //Pila de operadores
         List<Token> evaluar = new ArrayList(); //Es el arrreglo en el que vamos a recorrer las cosas con orden a evaluar
-        
+
         //Autómata para manejar la pila
         /*
             0 - Meter a la pila
             1 - Sacar de la pila y luego meter
             2 - Sacar de la pila y no meter
-        */
-        int [][] autop =    { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // (
-                              { 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // )
-                              { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // +
-                              { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // -
-                              { 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // /
-                              { 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // *
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // <
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // >
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // <=
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // >=
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // ==
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // !=
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}, // &
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}, // |
-                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}};// !
-        
+         */
+        int[][] autop = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // (
+        {2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // )
+        {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // +
+        {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // -
+        {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // /
+        {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // *
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // <
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // >
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // <=
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // >=
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // ==
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1}, // !=
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}, // &
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}, // |
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}};// !
+
         //Autómata para manejar las operaciones
         //Operaciones aritmeticas
-        int [][] autota =    { {  0,  1, 2, 2, -1}, 
-                               {  1,  1, 2, 2, -1},
-                               {  2,  2, 2, 2,  2},
-                               {  2,  2, 2, 2,  2},
-                               { -1, -1, 2, 2, -1}};
-        
+        int[][] autota = {{0, 1, 2, 2, -1},
+        {1, 1, 2, 2, -1},
+        {2, 2, 2, 2, 2},
+        {2, 2, 2, 2, 2},
+        {-1, -1, 2, 2, -1}};
+
         //Operaciones relacionales
-        int [][] autotr =    { {  4,  4, -1, -1, -1}, 
-                               {  4,  4, -1, -1, -1},
-                               { -1, -1,  4,  4, -1},
-                               { -1, -1,  4,  4, -1},
-                               { -1, -1, -1, -1,  4}};
-        
+        int[][] autotr = {{4, 4, -1, -1, -1},
+        {4, 4, -1, -1, -1},
+        {-1, -1, 4, 4, -1},
+        {-1, -1, 4, 4, -1},
+        {-1, -1, -1, -1, 4}};
+
         //Operaciones lógico
-        int [][] autotl =    { { -1, -1, -1, -1, -1}, 
-                               { -1, -1, -1, -1, -1},
-                               { -1, -1, -1, -1, -1},
-                               { -1, -1, -1, -1, -1},
-                               { -1, -1, -1, -1,  4}};
-        
+        int[][] autotl = {{-1, -1, -1, -1, -1},
+        {-1, -1, -1, -1, -1},
+        {-1, -1, -1, -1, -1},
+        {-1, -1, -1, -1, -1},
+        {-1, -1, -1, -1, 4}};
+
         //Obtener información de la expresión que se va a evaluar
-        for(Token tt : expresion)
-          cadena+= tt.Lexema();
-        
-        System.out.println("Variable a evaluar: "+principal.Lexema());
-        System.out.println("Expresion a evaluar: "+cadena);
-        System.out.println("Elementos a evaluar: "+expresion.size());
-        
+        for (Token tt : expresion) {
+            cadena += tt.Lexema();
+        }
+
+        System.out.println("Variable a evaluar: " + principal.Lexema());
+        System.out.println("Expresion a evaluar: " + cadena);
+        System.out.println("Elementos a evaluar: " + expresion.size());
+
         cadena = "";
-        
-        
+
         //EMPEZAMOS A TRABAJAR SOBRE LA EXPRESIÓN
-        
-        Token t=expresion.get(0);
-        for(int y = 0; y< expresion.size() ;y++){
+        Token t = expresion.get(0);
+        for (int y = 0; y < expresion.size(); y++) {
             t = expresion.get(y);
-            
-          switch(t.Tipo())
-          {
-              case 1: //id
-              case 35: //numero flotante
-              case 36: //numero entero
-              case 37: //literal String
-              case 38: //literal char
-              case 39: //true
-              case 40: //false
-                evaluar.add(t);
-                cadena+= t.Lexema()+" ";
-                break;
-              case 41: //Es un read
-                  int nump = 1;
-                   subexpresion = new ArrayList<>();
-                   
-                   expresion.remove(y);
-                   t = expresion.get(y);
-                    do
-                    {
-                        switch(t.Tipo())
-                        {
+
+            switch (t.Tipo()) {
+                case 1: //id
+                case 35: //numero flotante
+                case 36: //numero entero
+                case 37: //literal String
+                case 38: //literal char
+                case 39: //true
+                case 40: //false
+                    evaluar.add(t);
+                    cadena += t.Lexema() + " ";
+                    break;
+                case 41: //Es un read
+                    int nump = 1;
+                    subexpresion = new ArrayList<>();
+                    expresion.remove(y);
+                    t = expresion.get(y);
+                    do {
+                        switch (t.Tipo()) {
                             case 13:
                                 nump++;
                                 break;
                             case 14:
                                 nump--;
                         }
-                        System.out.println("Mandamos a la subexpresión: "+t.Lexema());
+                        System.out.println("Mandamos a la subexpresión: " + t.Lexema());
                         subexpresion.add(t);
                         expresion.remove(y);
-                        if(expresion.size() == 0)
+                        if (expresion.size() == 0)
                             break;
                         t = expresion.get(y);
-                    }while(nump != 1);
-                    t = Evaluar(subexpresion, new Token(37, "readRet", t.Linea()));
-                    if(t.equals("Error")){
-                        Error("Error semántico - Linea "+principal.Linea()+" - El resultado de tipo "+Tipo(vart)+" de la expresión no concuerda con el parámetro "+principal.Lexema()+" de tipo: "+ Tipo((Integer.parseInt(matriz_semantica.get(1).get(Buscar(principal.Lexema()))))));
-                        return new Token(42, Tipo(vart), t.Linea()); 
-                    }
-                    evaluar.add(t);
-                    cadena+= t.Lexema()+" ";
+                    } while (nump != 1);
+
+                    Agregar("printf(" + Parametro(subexpresion) + ");");
+
+                    cadv = IncVa(2);
+                    Agregar("scanf(\"%s\", " + cadv + ");");
+                    evaluar.add(new Token(37, cadv, t.Linea()));
+
                     y--;
-                  break;
-              case 22: // !
-              case 23: // &
-              case 24: // |
-              case 25: // <
-              case 26: // >
-              case 27: // <=
-              case 28: // >=
-              case 29: // ==
-              case 30: // !=
-              case 31: // +
-              case 32: // -
-              case 33: // *
-              case 34: // /
-                  if(pilao.empty())
-                      pilao.push(t);
-                  else
-                  {
-                      
-                      aux = true;
-                      while(aux)
-                      {
-                          if(pilao.empty()){
-                            pilao.push(t);
-                            break;
-                          }
-                          ap[1] = c.indexOf(pilao.peek().Lexema());
-                          ap[0] = c.indexOf(t.Lexema());
-                          switch(autop[ap[0]][ap[1]])
-                          {
-                              case 0: //Metemos a la pila
-                                  pilao.push(t);
-                                  aux= false;
-                                  break;
-                              case 1: //Sacamos
-                                  evaluar.add(pilao.pop());
-                                  cadena += evaluar.getLast().Lexema()+" ";
-                                  break;
-                              case 2: //Sacamos y luego terminamos
-                                  pilao.pop();
-                                  aux= false;
-                          }
-                      }
-                  }
-          }
+                    break;
+                case 22: // !
+                case 23: // &
+                case 24: // |
+                case 25: // <
+                case 26: // >
+                case 27: // <=
+                case 28: // >=
+                case 29: // ==
+                case 30: // !=
+                case 31: // +
+                case 32: // -
+                case 33: // *
+                case 34: // /
+                    if (pilao.empty())
+                        pilao.push(t);
+                    else {
+
+                        aux = true;
+                        while (aux) {
+                            if (pilao.empty()) {
+                                pilao.push(t);
+                                break;
+                            }
+                            ap[1] = c.indexOf(pilao.peek().Lexema());
+                            ap[0] = c.indexOf(t.Lexema());
+                            switch (autop[ap[0]][ap[1]]) {
+                                case 0: //Metemos a la pila
+                                    pilao.push(t);
+                                    aux = false;
+                                    break;
+                                case 1: //Sacamos
+                                    evaluar.add(pilao.pop());
+                                    cadena += evaluar.getLast().Lexema() + " ";
+                                    break;
+                                case 2: //Sacamos y luego terminamos
+                                    pilao.pop();
+                                    aux = false;
+                            }
+                        }
+                    }
+            }
         }
-        
-        while(!pilao.empty())
-        {
+
+        while (!pilao.empty()) {
             evaluar.add(pilao.pop());
-            cadena += evaluar.getLast().Lexema()+" ";
+            cadena += evaluar.getLast().Lexema() + " ";
         }
-        
-        System.out.println("Notacion postfija de la operacion:\n"+cadena);
-        
-        
-        
-        for(Token tt : evaluar)
-        {
-            System.out.println(tt.Lexema()+" de tipo "+tt.Tipo());
-            switch(tt.Tipo())
-            {
+
+        for (Token tt : evaluar) {
+            System.out.println(tt.Lexema() + " de tipo " + tt.Tipo());
+            switch (tt.Tipo()) {
                 case 1: //Para variables
                     pilae.push(Integer.parseInt(matriz_semantica.get(1).get(Buscar(tt.Lexema())))); //Obtenemos el tipo de dato de la variable
-                    con ++;
-                    codigo_intermedio += "V"+con+" = "+tt.Lexema()+";\n";
+                    pilas.push(tt.Lexema());
                     break;
                 case 35: // float
                     pilae.push(1);
-                    con ++;
-                    if(! tt.Lexema().equals("float"))
-                    codigo_intermedio += "V"+con+" = "+tt.Lexema()+";\n";
+                    pilas.push(tt.Lexema());
                     break;
                 case 36: // int
                     pilae.push(0);
-                    con ++;
-                    if(! tt.Lexema().equals("int"))
-                    codigo_intermedio += "V"+con+" = "+tt.Lexema()+";\n";
+                    pilas.push(tt.Lexema());
                     break;
                 case 37: // String
                     pilae.push(2);
-                    con ++;
-                    if(! tt.Lexema().equals("String"))
-                    codigo_intermedio += "V"+con+" = "+tt.Lexema()+";\n";
+                    pilas.push(tt.Lexema());
                     break;
                 case 38: // char
                     pilae.push(3);
-                    con ++;
-                    if(! tt.Lexema().equals("int"))
-                    codigo_intermedio += "V"+con+" = "+tt.Lexema()+";\n";
+                    pilas.push(tt.Lexema());
                     break;
                 case 39: // boolean
                     pilae.push(4);
-                    con ++;
-                    if(! tt.Lexema().equals("boolean"))
-                    codigo_intermedio += "V"+con+" = "+tt.Lexema()+";\n";
+                    pilas.push(tt.Lexema());
                     break;
                 case 40: // boolean
                     pilae.push(4);
-                    con ++;
-                    if(! tt.Lexema().equals("boolean"))
-                    codigo_intermedio += "V"+con+" = "+tt.Lexema()+";\n";
+                    pilas.push(tt.Lexema());
                     break;
-                    
+
                 default: //Osea que debe ser un operador
-                    con --;
+                    con--;
                     var2 = pilae.pop();
                     var1 = pilae.pop();
+                    cadv1 = IncVa(var1);
+                    cadv2 = IncVa(var2);
+
+                    if (var2 == 2)
+                        Agregar("strcpy( " + cadv2 + ", " + pilas.pop() + ");");
+                    else
+                        Agregar(cadv2 + " = " + pilas.pop() + ";");
+
+                    if (var1 == 2)
+                        Agregar("strcpy( " + cadv1 + ", " + pilas.pop() + ");");
+                    else
+                        Agregar(cadv1 + " = " + pilas.pop() + ";");
+
                     //Dividir en las operaciones y los casos específicos
-                    
-                    switch(tt.Tipo())
-                    {
+                    switch (tt.Tipo()) {
                         case 22: // !
                         case 23: // &
                         case 24: // |
@@ -844,105 +873,252 @@ public class Interfaz extends javax.swing.JFrame {
                         case 26: // >
                         case 27: // <=
                         case 28: // >=
-                            if(var1 > 1 | var2 > 1)
-                            {
-                                Error("Error semántico - Linea "+tt.Linea()+" - Los tipos de datos no son compatibles para la operación: "+ Tipo(var1)+" "+tt.Lexema()+" "+Tipo(var2));
-                                return new Token(42, "Error", tt.Linea()); 
+                            if (var1 > 1 | var2 > 1) {
+                                Error("Error semántico - Linea " + tt.Linea() + " - Los tipos de datos no son compatibles para la operación: " + Tipo(var1) + " " + tt.Lexema() + " " + Tipo(var2));
+                                return new Token(42, "Error", tt.Linea());
                             }
-                        case 29: // ==
+                        case 29: // == Aquí es cuando se usaría el strcmp
                         case 30: // !=
                             vart = autotr[var2][var1];
                             break;
                         case 32: // -
                         case 33: // *
                         case 34: // /
-                            if(var1 > 1 | var2 > 1)
-                            {
-                                Error("Error semántico - Linea "+tt.Linea()+" - Los tipos de datos no son compatibles para la operación: "+ Tipo(var1)+" "+tt.Lexema()+" "+Tipo(var2));
-                                return new Token(42, "Error", tt.Linea()); 
+                            if (var1 > 1 | var2 > 1) {
+                                Error("Error semántico - Linea " + tt.Linea() + " - Los tipos de datos no son compatibles para la operación: " + Tipo(var1) + " " + tt.Lexema() + " " + Tipo(var2));
+                                return new Token(42, "Error", tt.Linea());
                             }
-                        case 31: // +
+                        case 31: // + 
+
                             vart = autota[var2][var1];
+
                     }
-                    codigo_intermedio += "V"+con+" = V"+con+" "+tt.Lexema()+" V"+(con+1)+";\n";
-                    
-                    if(vart == -1)
-                    {
-                        Error("Error semántico - Linea "+tt.Linea()+" - Los tipos de datos no son compatibles para la operación: "+ Tipo(var1)+" "+tt.Lexema()+" "+Tipo(var2));
-                        return new Token(42, "Error", tt.Linea()); 
+
+                    if (vart == var1) {
+                        cadv = cadv1;
+                    } else {
+                        if (vart == var2)
+                            cadv = cadv2;
+                        else
+                            cadv = IncVa(vart);
                     }
+
+                    pilas.push(cadv);
+                    DecVa(var1);
+                    DecVa(var2);
+
+                    if (vart == -1) {
+                        Error("Error semántico - Linea " + tt.Linea() + " - Los tipos de datos no son compatibles para la operación: " + Tipo(var1) + " " + tt.Lexema() + " " + Tipo(var2));
+                        return new Token(42, "Error", tt.Linea());
+                    }
+
+                    //**********************************************************************************************************
+                    //Esto es algo a modificar para usar las operaciones especiales de cadena
+                    //**********************************************************************************************************
+                    switch (tt.Lexema()) {
+                        case "==":
+                            if (vart == 2) {
+                                Agregar(cadv + " = strcmp(" + cadv1 + " , " + cadv2 + ") == 0;");
+                                break;
+                            } else
+                                Agregar(cadv + " = " + cadv1 + " " + tt.Lexema() + " " + cadv2 + ";");
+                        case "!=":
+                            if (vart == 2) {
+                                Agregar(cadv + " = strcmp(" + cadv1 + " , " + cadv2 + ") != 0;");
+                                break;
+                            } else
+                                Agregar(cadv + " = " + cadv1 + " " + tt.Lexema() + " " + cadv2 + ";");
+                        case "+":
+
+                            if (vart == 2) {
+                                switch (cadv1.charAt(1)) {
+                                    case 's':
+                                        Agregar("strcat(" + cadv + " , " + cadv1 + ");");
+                                        break;
+                                    case 'b':
+                                        Agregar("sprintf(" + cadv + " , \"%d\" ," + cadv1 + ");");
+                                        break;
+                                    default:
+                                        Agregar("sprintf(" + cadv + " , \"%d\" ," + cadv1 + ");");
+                                }
+
+                                break;
+                            }
+
+                        default:
+                            Agregar(cadv + " = " + cadv1 + " " + tt.Lexema() + " " + cadv2 + ";");
+                    }
+
                     pilae.push(vart);
             }
         }
-        System.out.println("Teminó la evaluación para buscar a :"+principal.Lexema() +" de tipo "+principal.Tipo());
-        if(evaluar.size()==1)
+        System.out.println("Teminó la evaluación para buscar a :" + principal.Lexema() + " de tipo " + principal.Tipo());
+        if (evaluar.size() == 1) {
             vart = pilae.pop();
-        if(principal.Tipo() == 7)
-            return new Token(TipoCod(vart), "valSwitch", principal.Linea()); 
-        if(principal.Tipo() != 1){
-            if(vart != Tipoinv(principal.Tipo()) )
-            {
-                Error("Error semántico - Linea "+principal.Linea()+" - El resultado de tipo "+Tipo(vart)+" de la expresión no concuerda con el parametro de tipo: "+ principal.Lexema());
-                return new Token(42, "Error", principal.Linea()); 
-            }
+            cadv = pilas.pop();
+
         }
+
+        if (principal.Tipo() == 7) {
+            if (vart == 2)
+                Agregar("strcpy ( " + principal.Lexema() + ", " + cadv + ");");
+            else
+                Agregar(principal.Lexema() + " = " + cadv + ";");
+            return new Token(TipoCod(vart), "valSwitch", principal.Linea());
+
+        }
+
+        if (principal.Tipo() != 1) {
+            if (vart != Tipoinv(principal.Tipo())) {
+                Error("Error semántico - Linea " + principal.Linea() + " - El resultado de tipo " + Tipo(vart) + " de la expresión no concuerda con el parametro de tipo: " + principal.Lexema());
+                return new Token(42, "Error", principal.Linea());
+            }
+        } else if (vart != (Integer.parseInt(matriz_semantica.get(1).get(Buscar(principal.Lexema()))))) {
+            Error("Error semántico - Linea " + principal.Linea() + " - El resultado de tipo " + Tipo(vart) + " de la expresión no concuerda con la variable " + principal.Lexema() + " de tipo: " + Tipo((Integer.parseInt(matriz_semantica.get(1).get(Buscar(principal.Lexema()))))));
+            return new Token(42, "Error", principal.Linea());
+        }
+
+        if (principal.Lexema().equals("valSwitch")) {
+            cadv1 = IncVa(vart);
+            if (vart == 2)
+                Agregar("strcpy ( " + cadv1 + ", " + cadv + ");");
+            else
+                Agregar(cadv1 + " = " + cadv + ";");
+            return new Token(principal.Tipo(), cadv1 , t.Linea());
+        }
+        
+
+        if (vart == 2)
+            Agregar("strcpy ( " + principal.Lexema() + ", " + cadv + ");");
         else
-            if(vart != (Integer.parseInt(matriz_semantica.get(1).get(Buscar(principal.Lexema()))))){
-                Error("Error semántico - Linea "+principal.Linea()+" - El resultado de tipo "+Tipo(vart)+" de la expresión no concuerda con la variable "+principal.Lexema()+" de tipo: "+ Tipo((Integer.parseInt(matriz_semantica.get(1).get(Buscar(principal.Lexema()))))));
-                return new Token(42, "Error", principal.Linea()); 
-            }
-        
-        switch(principal.Lexema())
-        {
-            case "readRet":
-                codigo_intermedio += "printf(V1);\n";
-                codigo_intermedio += "scanf(\"%s\", V1);\n";
-                break;
-            default:
-                codigo_intermedio += principal.Lexema()+" = V1;\n";
-        }
-        
-        return new Token(principal.Tipo(), Tipo(vart), t.Linea()); 
+            Agregar(principal.Lexema() + " = " + cadv + ";");
+
+        return new Token(principal.Tipo(), Tipo(vart), t.Linea());
     }
-    
-    public void Error(String msj)
-    {
+
+    public void Error(String msj) {
         System.out.println(msj);
         Area_Errores.setText(msj);
     }
-    
-    public void IncWhile(){
-        numw ++;
+
+    public void Agregar(String msj) {
+        for (int x = 0; x <= tab; x++) {
+            codigo_intermedio += "\t";
+        }
+        codigo_intermedio += msj + "\n";
     }
-    
-    public void IncSwitch(){
-        nums ++;
+
+    public String Parametro(List<Token> exp) {
+        String p = "", cad = "\" ", va  = "";
+
+        for (Token tt : exp) {
+            System.out.println(tt.Lexema() + " de tipo " + tt.Tipo());
+            switch (tt.Tipo()) {
+                case 1: //Para variables
+                case 35: // float
+                case 36: // int
+                case 37: // String
+                case 38: // char
+                case 39: // boolean
+                case 40: // boolean
+                    va  += ", " + tt.Lexema();
+            }
+
+            switch (tt.Tipo()) {
+                case 1: //Para variables
+                    switch (matriz_semantica.get(1).get(Buscar(tt.Lexema()))) {
+                        case "0" ->
+                            cad += "%d ";
+                        case "1" ->
+                            cad += "%f ";
+                        case "2" ->
+                            cad += "%s ";
+                        case "3" ->
+                            cad += "%c ";
+                        case "4" ->
+                            cad += "%d ";
+                    }
+                    break;
+                case 35: // float
+                    cad += "%f ";
+                    break;
+                case 36: // int
+                    cad += "%d ";
+                    break;
+                case 37: // String
+                    cad += "%s ";
+                    break;
+                case 38: // char
+                    cad += "%c ";
+                    break;
+                case 39: // boolean
+                case 40: // boolean
+                    cad += "%d ";
+            }
+        }
+
+        cad += "\"";
+
+        return cad + va;
     }
-    
-    public void IncCase(){
-        numc ++;
+
+    public String IncVa(int tipo) {
+        String v = "V";
+        conta[tipo]++;
+        if (contad[tipo] < conta[tipo])
+            contad[tipo]++;
+        switch (tipo) {
+            case 0 ->
+                v += "d";
+            case 1 ->
+                v += "f";
+            case 2 ->
+                v += "s";
+            case 3 ->
+                v += "c";
+            case 4 ->
+                v += "b";
+
+        }
+
+        v += conta[tipo];
+
+        return v;
     }
-    
-    public int Buscar(String id)
-    {
+
+    public void DecVa(int v) {
+        conta[v]--;
+    }
+
+    public void IncWhile() {
+        numw++;
+    }
+
+    public void IncSwitch() {
+        nums++;
+    }
+
+    public void IncCase() {
+        numc++;
+    }
+
+    public int Buscar(String id) {
         int x = -1;
-        for(x = matriz_semantica.get(0).size()-1;x>-1;x--)
-            if(matriz_semantica.get(0).get(x).equals(id))
+        for (x = matriz_semantica.get(0).size() - 1; x > -1; x--) {
+            if (matriz_semantica.get(0).get(x).equals(id))
                 return x;
+        }
         return x;
     }
-    
-    
-    public String Validos(int est)
-    {
-        String val="";
+
+    public String Validos(int est) {
+        String val = "";
         List<String> estado = matriz.get(est);
-        for(int x = 0; x < estado.size();x++)
-        {
-            if(x >= columnas.indexOf("$"))
+        for (int x = 0; x < estado.size(); x++) {
+            if (x >= columnas.indexOf("$"))
                 return val;
-            if(!estado.get(x).isBlank())
-                val+= columnas.get(x)+" ";
+            if (!estado.get(x).isBlank())
+                val += columnas.get(x) + " ";
         }
         return val;
     }
@@ -959,38 +1135,33 @@ public class Interfaz extends javax.swing.JFrame {
         texto += "\n";
         Area_Sintactico.setText(texto);
     }
-    
-    public String Tipo (int t)
-    {
-        switch(t)
-        {
+
+    public String Tipo(int t) {
+        switch (t) {
             case -1 -> {
                 return "Clase";
             }
             case 0 -> {
-                return "Int";
+                return "int";
             }
             case 1 -> {
-                return "Float";
+                return "float";
             }
             case 2 -> {
-                return "String";
+                return "char [30]";
             }
             case 3 -> {
-                return "Char";
+                return "char";
             }
             case 4 -> {
-                return "Boolean";
+                return "bool";
             }
         }
         return "Tipo no identificado";
     }
-    
-    
-    public int Tipoinv (int t)
-    {
-        switch(t)
-        {
+
+    public int Tipoinv(int t) {
+        switch (t) {
             case 35 -> {
                 return 1;
             }
@@ -1012,11 +1183,9 @@ public class Interfaz extends javax.swing.JFrame {
         }
         return -1;
     }
-    
-    public int TipoCod (int t)
-    {
-        switch(t)
-        {
+
+    public int TipoCod(int t) {
+        switch (t) {
             case 1 -> {
                 return 25;
             }
@@ -1035,7 +1204,7 @@ public class Interfaz extends javax.swing.JFrame {
         }
         return -1;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1082,7 +1251,7 @@ public class Interfaz extends javax.swing.JFrame {
         menu_opciones = new javax.swing.JMenu();
         op_correr = new javax.swing.JMenuItem();
 
-        Selector.setCurrentDirectory(new java.io.File("C:\\Users\\Omen\\Documents\\NetBeansProjects\\Compiladorv2\\src\\compiladorv2\\archivos"));
+        Selector.setCurrentDirectory(new java.io.File("C:\\Users\\Omen\\Documents\\NetBeansProjects\\Compilador_final\\src\\compiladorv2\\archivos\\Ejemplo1.txt"));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(31, 31, 31));
@@ -1382,6 +1551,7 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void btn_correrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_correrActionPerformed
         Area_Errores.setText("");
+
         Lexico();
     }//GEN-LAST:event_btn_correrActionPerformed
 
