@@ -1,6 +1,0 @@
-program Ejemp {
-	int a ;
-	int b ;
-	int c ;
-	a = 3 + 5 ;
-}

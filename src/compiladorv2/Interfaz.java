@@ -453,6 +453,7 @@ public class Interfaz extends javax.swing.JFrame {
                         case 15: //{
                             tab++;
                             if (tipo == 2) {
+                                IncSwitch();
                                 System.out.println("Se obtendrá el valor del switch");
                                 vswitch = Evaluar(expresion, new Token(7, "valSwitch" + nums, tok.Linea()));
                                 matriz_semantica.get(0).add("valSwitch" + nums);
@@ -485,7 +486,6 @@ public class Interfaz extends javax.swing.JFrame {
                                 System.out.println("El resultado fue " + buscar.Lexema());
                                 Agregar("if (whileCon)");
                                 Agregar("\tgoto etqWhile" + numw + ";");
-                                IncWhile();
                                 tipo = 1;
                                 break;
                             }
@@ -507,7 +507,6 @@ public class Interfaz extends javax.swing.JFrame {
                             break;
                         case 7: //switch
                             ssc = true;
-                            IncSwitch();
                             numc = 1;
                         case 18: //case
                             asignacion = false;
@@ -689,25 +688,28 @@ public class Interfaz extends javax.swing.JFrame {
 
         //Autómata para manejar las operaciones
         //Operaciones aritmeticas
-        int[][] autota = {{0, 1, 2, 2, -1},
-        {1, 1, 2, 2, -1},
-        {2, 2, 2, 2, 2},
-        {2, 2, 2, 2, 2},
-        {-1, -1, 2, 2, -1}};
+        int[][] autota = {
+            {0, 1, 2, 2, -1},
+            {1, 1, 2, 2, -1},
+            {2, 2, 2, 2, 2},
+            {2, 2, 2, 2, 2},
+            {-1, -1, 2, 2, -1}};
 
         //Operaciones relacionales
-        int[][] autotr = {{4, 4, -1, -1, -1},
-        {4, 4, -1, -1, -1},
-        {-1, -1, 4, 4, -1},
-        {-1, -1, 4, 4, -1},
-        {-1, -1, -1, -1, 4}};
+        int[][] autotr = {
+            {4, 4, -1, -1, -1},
+            {4, 4, -1, -1, -1},
+            {-1, -1, 4, 4, -1},
+            {-1, -1, 4, 4, -1},
+            {-1, -1, -1, -1, 4}};
 
         //Operaciones lógico
-        int[][] autotl = {{-1, -1, -1, -1, -1},
-        {-1, -1, -1, -1, -1},
-        {-1, -1, -1, -1, -1},
-        {-1, -1, -1, -1, -1},
-        {-1, -1, -1, -1, 4}};
+        int[][] autotl = {
+            {-1, -1, -1, -1, -1},
+            {-1, -1, -1, -1, -1},
+            {-1, -1, -1, -1, -1},
+            {-1, -1, -1, -1, -1},
+            {-1, -1, -1, -1, 4}};
 
         //Obtener información de la expresión que se va a evaluar
         for (Token tt : expresion) {
@@ -845,6 +847,28 @@ public class Interfaz extends javax.swing.JFrame {
                     pilas.push(tt.Lexema());
                     break;
 
+                case 22: // !
+                     var1 = pilae.pop();
+                     cadv1 = IncVa(var1);
+                    
+                     if (var1 != 4) {
+                        Error("Error semántico - Linea " + tt.Linea() + " - El elemento que se está negando no es de tipo lógico: " + cadv1);
+                        return new Token(42, "Error", tt.Linea());
+                    }
+                     
+                     Agregar(cadv1 + " = " + pilas.pop() + ";");
+                     
+                     vart = 4;
+                     cadv = cadv1;
+                     
+                     
+                    pilas.push(cadv);
+                    DecVa(var1);
+                    
+                    Agregar( cadv + " = !" + cadv1 + ";");
+                    
+                    
+                     break;
                 default: //Osea que debe ser un operador
                     con--;
                     var2 = pilae.pop();
@@ -852,14 +876,16 @@ public class Interfaz extends javax.swing.JFrame {
                     cadv1 = IncVa(var1);
                     cadv2 = IncVa(var2);
 
-                    if (var2 == 2)
-                        Agregar("strcpy( " + cadv2 + ", " + pilas.pop() + ");");
-                    else
+                    if (var2 == 2){
+                        if(!(cadv2.equals(pilas.peek())))
+                            Agregar("strcpy( " + cadv2 + ", " + pilas.pop() + ");");
+                    } else
                         Agregar(cadv2 + " = " + pilas.pop() + ";");
 
-                    if (var1 == 2)
+                    if (var1 == 2 ){
+                        if(!(cadv1.equals(pilas.peek())))
                         Agregar("strcpy( " + cadv1 + ", " + pilas.pop() + ");");
-                    else
+                    }else
                         Agregar(cadv1 + " = " + pilas.pop() + ";");
 
                     //Dividir en las operaciones y los casos específicos
@@ -894,19 +920,19 @@ public class Interfaz extends javax.swing.JFrame {
 
                     }
 
-                    if (vart == var1) {
+                    if (vart == var1) 
                         cadv = cadv1;
-                    } else {
+                    else {
                         if (vart == var2)
                             cadv = cadv2;
-                        else
+                        else{
                             cadv = IncVa(vart);
+                            DecVa(vart);
+                        }
                     }
 
                     pilas.push(cadv);
-                    DecVa(var1);
-                    DecVa(var2);
-
+                    
                     if (vart == -1) {
                         Error("Error semántico - Linea " + tt.Linea() + " - Los tipos de datos no son compatibles para la operación: " + Tipo(var1) + " " + tt.Lexema() + " " + Tipo(var2));
                         return new Token(42, "Error", tt.Linea());
@@ -916,30 +942,42 @@ public class Interfaz extends javax.swing.JFrame {
                     //Esto es algo a modificar para usar las operaciones especiales de cadena
                     //**********************************************************************************************************
                     switch (tt.Lexema()) {
+                        case "|":
+                            Agregar(cadv + " = " + cadv1 + " || " + cadv2 + ";");
+                            break;
+                        case "&":
+                            Agregar(cadv + " = " + cadv1 + " && " + cadv2 + ";");
+                            break;
                         case "==":
-                            if (vart == 2) {
+                            if (var1 == 2)
                                 Agregar(cadv + " = strcmp(" + cadv1 + " , " + cadv2 + ") == 0;");
-                                break;
-                            } else
+                            else
                                 Agregar(cadv + " = " + cadv1 + " " + tt.Lexema() + " " + cadv2 + ";");
+                            break;
                         case "!=":
-                            if (vart == 2) {
+                            if (var1 == 2) 
                                 Agregar(cadv + " = strcmp(" + cadv1 + " , " + cadv2 + ") != 0;");
-                                break;
-                            } else
+                            else
                                 Agregar(cadv + " = " + cadv1 + " " + tt.Lexema() + " " + cadv2 + ";");
+                            break;
                         case "+":
 
                             if (vart == 2) {
-                                switch (cadv1.charAt(1)) {
+                                switch (cadv2.charAt(1)) {
                                     case 's':
-                                        Agregar("strcat(" + cadv + " , " + cadv1 + ");");
+                                        Agregar("strcat(" + cadv + " , " + cadv2 + ");");
                                         break;
                                     case 'b':
-                                        Agregar("sprintf(" + cadv + " , \"%d\" ," + cadv1 + ");");
+                                        cadv1 = IncVa(2);
+                                        Agregar("sprintf(" + cadv1 + " , \"%d\" ," + cadv2 + ");");
+                                        Agregar("strcat(" + cadv + " , " + cadv1 + ");");
+                                        DecVa(2);
                                         break;
                                     default:
-                                        Agregar("sprintf(" + cadv + " , \"%d\" ," + cadv1 + ");");
+                                        cadv1 = IncVa(2);
+                                        Agregar("sprintf(" + cadv1 + " , \"%"+cadv2.charAt(1)+"\" ," + cadv2 + ");");
+                                        Agregar("strcat(" + cadv + " , " + cadv1 + ");");
+                                        DecVa(2);
                                 }
 
                                 break;
@@ -948,6 +986,9 @@ public class Interfaz extends javax.swing.JFrame {
                         default:
                             Agregar(cadv + " = " + cadv1 + " " + tt.Lexema() + " " + cadv2 + ";");
                     }
+                    
+                     DecVa(var1);
+                    DecVa(var2);
 
                     pilae.push(vart);
             }

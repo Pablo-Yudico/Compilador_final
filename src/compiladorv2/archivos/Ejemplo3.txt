@@ -1,4 +1,0 @@
-int a , b ;
-float c , d ;
-char e,f;
-d = ( 3 * a + c  / b ) - ( 5 - 2 ) ;
